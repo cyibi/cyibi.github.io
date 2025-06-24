@@ -1,15 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>タイピングゲーム</title>
-
-  <!-- Google AdSense 所有権確認用スクリプト -->
- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
-     crossorigin="anonymous"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
+    #word { font-size: 2em; margin: 20px; color: #333; }
+    #input { font-size: 1.5em; padding: 5px; width: 80%; max-width: 400px; }
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
 </head>
 <body>
-  <h1>これはタイピングゲーム画面です！</h1>
-  <p>FlaskからHTMLがちゃんと表示されています！</p>
+  <h1>タイピングゲーム</h1>
+  <p id="word">loading...</p>
+  <input type="text" id="input" placeholder="ここにタイピング" autofocus>
+  <div id="result"></div>
+
+  <!-- ↓ ここに広告タグをあとで挿入（AdSense認可後） -->
+  <!-- 例）<div class="ad-slot"> ... </div> -->
+
+  <script>
+    const words = ["apple", "banana", "keyboard", "computer", "javascript", "programming", "github"];
+    const wordEl = document.getElementById("word");
+    const inputEl = document.getElementById("input");
+    const resultEl = document.getElementById("result");
+
+    let currentWord = "";
+
+    function setNewWord() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      wordEl.textContent = currentWord;
+      inputEl.value = "";
+      resultEl.textContent = "";
+    }
+
+    inputEl.addEventListener("input", () => {
+      if (inputEl.value === currentWord) {
+        resultEl.textContent = "正解！";
+        setTimeout(setNewWord, 1000);
+      }
+    });
+
+    setNewWord();
+  </script>
 </body>
 </html>
