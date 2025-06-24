@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>タイピングゲーム</title>
+
+  <!-- ✅ あなたのAdSense広告スクリプト -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
+    crossorigin="anonymous"></script>
+
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
+    body { font-family: sans-serif; text-align: center; padding: 30px; background: #f9f9f9; }
     #word { font-size: 2em; margin: 20px; color: #333; }
-    #input { font-size: 1.5em; padding: 5px; width: 80%; max-width: 400px; }
+    #input { font-size: 1.5em; padding: 8px; width: 80%; max-width: 400px; }
     #result { margin-top: 20px; font-weight: bold; }
   </style>
 </head>
 <body>
   <h1>タイピングゲーム</h1>
   <p id="word">loading...</p>
-  <input type="text" id="input" placeholder="ここにタイピング" autofocus>
+  <input type="text" id="input" placeholder="ここにタイピング" autofocus />
   <div id="result"></div>
 
-  <!-- ↓ ここに広告タグをあとで挿入（AdSense認可後） -->
-  <!-- 例）<div class="ad-slot"> ... </div> -->
+  <!-- 🔽 広告表示位置（バナー形式の例） -->
+  <div style="margin-top: 30px;">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:100px"
+         data-ad-client="ca-pub-3312473553198083"
+         data-ad-slot="1234567890"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
   <script>
     const words = ["apple", "banana", "keyboard", "computer", "javascript", "programming", "github"];
