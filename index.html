@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>章別タイピングゲーム（Firebase連携版）</title>
+  <title>章別タイピングゲーム</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
     #chapter { font-size: 1.5em; margin-bottom: 10px; }
@@ -164,10 +164,4 @@
     quitBtn.addEventListener("click", () => location.reload());
 
     function loadRanking() {
-      table.innerHTML = "<tr><th>名前</th><th>ミス</th><th>章</th></tr>";
-      db.ref("ranking").limitToLast(10).once("value", snapshot => {
-        const data = snapshot.val();
-        if (data) {
-          const entries = Object.values(data).sort((a, b) => a.misses - b.misses);
-          entries.forEach(entry => {
-            const n
+      table.innerHTML = "<tr><th>名前</th><th>
