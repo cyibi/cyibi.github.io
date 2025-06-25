@@ -33,6 +33,7 @@
   <button id="quitBtn">ゲームをやめる</button>
   <div id="result"></div>
   <div id="timer">残り時間: --秒</div>
+
   <div id="ranking">
     <h2>ランキング</h2>
     <table id="rankingTable">
@@ -42,13 +43,13 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "ここに自分のAPIキー",
-      authDomain: "your-app.firebaseapp.com",
-      databaseURL: "https://your-app.firebaseio.com",
-      projectId: "your-app",
-      storageBucket: "your-app.appspot.com",
-      messagingSenderId: "送信者ID",
-      appId: "アプリID"
+      apiKey: "朝山さんのAPIキーをここに再入力",
+      authDomain: "xxx.firebaseapp.com",
+      databaseURL: "https://xxx.firebaseio.com",
+      projectId: "xxx",
+      storageBucket: "xxx.appspot.com",
+      messagingSenderId: "xxx",
+      appId: "xxx"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -87,12 +88,10 @@
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const remaining = 60 - elapsed;
       timerEl.textContent = "残り時間: " + remaining + "秒";
-
       if (remaining <= 0 || count >= 10) {
         clearInterval(timerId);
         inputEl.disabled = true;
         const chapter = chapters[currentChapter];
-
         if (misses > chapter.maxMiss) {
           resultEl.textContent = `失敗… ミス: ${misses}回（許容 ${chapter.maxMiss}回まで）`;
           wordEl.textContent = "リトライか、ゲームを終了できます";
@@ -100,7 +99,6 @@
           quitBtn.style.display = "inline-block";
           return;
         }
-
         const rank = getRank(misses);
         resultEl.innerHTML = `クリア！ ミス: ${misses}回 - ランク: ${rank}`;
         const name = prompt("名前を入力してください（匿名OK）:");
@@ -174,18 +172,8 @@
         if (data) {
           const entries = Object.values(data).sort((a, b) => a.misses - b.misses);
           entries.forEach(entry => {
-            const tr = document.createElement("tr");
             const n = entry.name || "名無し";
             const m = typeof entry.misses === "number" ? entry.misses : "？";
             const c = entry.chapter || "？";
-            tr.innerHTML = `<td>${n}</td><td>${m}</td><td>${c}</td>`;
-            table.appendChild(tr);
-          });
-        }
-      });
-    }
-
-    loadRanking();
-  </script>
-</body>
-</html>
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${n}</td><td>${
