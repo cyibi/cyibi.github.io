@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>章別タイピングゲーム（チャレンジ付き）</title>
+  <title>章別タイピングゲーム（修正版）</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
     #chapter { font-size: 1.5em; margin-bottom: 10px; }
@@ -43,7 +43,7 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "朝山さんのAPIキーをここに再入力",
+      apiKey: "あなたのAPIキー",
       authDomain: "xxx.firebaseapp.com",
       databaseURL: "https://xxx.firebaseio.com",
       projectId: "xxx",
@@ -88,10 +88,12 @@
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const remaining = 60 - elapsed;
       timerEl.textContent = "残り時間: " + remaining + "秒";
+
       if (remaining <= 0 || count >= 10) {
         clearInterval(timerId);
         inputEl.disabled = true;
         const chapter = chapters[currentChapter];
+
         if (misses > chapter.maxMiss) {
           resultEl.textContent = `失敗… ミス: ${misses}回（許容 ${chapter.maxMiss}回まで）`;
           wordEl.textContent = "リトライか、ゲームを終了できます";
@@ -99,12 +101,11 @@
           quitBtn.style.display = "inline-block";
           return;
         }
+
         const rank = getRank(misses);
         resultEl.innerHTML = `クリア！ ミス: ${misses}回 - ランク: ${rank}`;
         const name = prompt("名前を入力してください（匿名OK）:");
-        if (name) {
-          db.ref("ranking").push({ name, misses, chapter: chapter.name });
-        }
+        if (name) db.ref("ranking").push({ name, misses, chapter: chapter.name });
         if (currentChapter < chapters.length - 1) {
           nextBtn.style.display = "block";
         } else {
@@ -176,4 +177,14 @@
             const m = typeof entry.misses === "number" ? entry.misses : "？";
             const c = entry.chapter || "？";
             const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${n}</td><td>${
+            tr.innerHTML = `<td>${n}</td><td>${m}</td><td>${c}</td>`;
+            table.appendChild(tr);
+          });
+        }
+      });
+    }
+
+    loadRanking();
+  </script>
+</body>
+</html>
