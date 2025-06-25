@@ -19,7 +19,6 @@
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { padding: 6px 10px; border-bottom: 1px solid #ccc; }
   </style>
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
 </head>
@@ -34,7 +33,6 @@
   <button id="quitBtn">ゲームをやめる</button>
   <div id="result"></div>
   <div id="timer">残り時間: --秒</div>
-
   <div id="ranking">
     <h2>ランキング</h2>
     <table id="rankingTable">
@@ -42,22 +40,19 @@
     </table>
   </div>
 
-  <!-- Firebase 設定 -->
   <script>
     const firebaseConfig = {
-      apiKey: "あなたのAPIキー",
-      authDomain: "typing-game.firebaseapp.com",
-      databaseURL: "https://typing-game.firebaseio.com",
-      projectId: "typing-game",
-      storageBucket: "typing-game.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
+      apiKey: "ここに自分のAPIキー",
+      authDomain: "your-app.firebaseapp.com",
+      databaseURL: "https://your-app.firebaseio.com",
+      projectId: "your-app",
+      storageBucket: "your-app.appspot.com",
+      messagingSenderId: "送信者ID",
+      appId: "アプリID"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-  </script>
 
-  <script>
     const chapters = [
       { name: "第1章", words: ["cat","dog","sun","tree","book","car","pen","fish","home","milk"], maxMiss: 2 },
       { name: "第2章", words: ["window","purple","banana","coffee","guitar","planet","silver","yellow","butter","bridge"], maxMiss: 3 },
@@ -77,10 +72,7 @@
     const table = document.getElementById("rankingTable");
 
     function startChapter() {
-      startBtn.style.display = "none";
-      nextBtn.style.display = "none";
-      retryBtn.style.display = "none";
-      quitBtn.style.display = "none";
+      [startBtn, nextBtn, retryBtn, quitBtn].forEach(btn => btn.style.display = "none");
       inputEl.disabled = false;
       inputEl.focus();
       count = 0;
@@ -99,8 +91,8 @@
       if (remaining <= 0 || count >= 10) {
         clearInterval(timerId);
         inputEl.disabled = true;
-
         const chapter = chapters[currentChapter];
+
         if (misses > chapter.maxMiss) {
           resultEl.textContent = `失敗… ミス: ${misses}回（許容 ${chapter.maxMiss}回まで）`;
           wordEl.textContent = "リトライか、ゲームを終了できます";
@@ -115,14 +107,12 @@
         if (name) {
           db.ref("ranking").push({ name, misses, chapter: chapter.name });
         }
-
         if (currentChapter < chapters.length - 1) {
           nextBtn.style.display = "block";
         } else {
           wordEl.textContent = "全章クリア！お疲れ様！";
           timerEl.textContent = "";
         }
-
         loadRanking();
       }
     }
@@ -162,28 +152,40 @@
       chapterEl.textContent = chapters[currentChapter].name;
       startBtn.textContent = `${chapters[currentChapter].name} スタート`;
       startBtn.style.display = "block";
-      nextBtn.style.display = "none";
       wordEl.textContent = "章を開始するにはボタンを押してください";
       resultEl.textContent = "";
     });
 
     retryBtn.addEventListener("click", () => {
-      chapterEl.textContent = chapters[currentChapter].name;
       startBtn.textContent = `${chapters[currentChapter].name} スタート`;
       startBtn.style.display = "block";
+      resultEl.textContent = "";
+      wordEl.textContent = "再チャレンジできます";
       retryBtn.style.display = "none";
       quitBtn.style.display = "none";
-      wordEl.textContent = "再チャレンジできます";
-      resultEl.textContent = "";
     });
 
-    quitBtn.addEventListener("click", () => {
-      location.reload();
-    });
+    quitBtn.addEventListener("click", () => location.reload());
 
     function loadRanking() {
       table.innerHTML = "<tr><th>名前</th><th>ミス</th><th>章</th></tr>";
       db.ref("ranking").limitToLast(10).once("value", snapshot => {
         const data = snapshot.val();
         if (data) {
-          const entries = Object.values(data).sort((a
+          const entries = Object.values(data).sort((a, b) => a.misses - b.misses);
+          entries.forEach(entry => {
+            const tr = document.createElement("tr");
+            const n = entry.name || "名無し";
+            const m = typeof entry.misses === "number" ? entry.misses : "？";
+            const c = entry.chapter || "？";
+            tr.innerHTML = `<td>${n}</td><td>${m}</td><td>${c}</td>`;
+            table.appendChild(tr);
+          });
+        }
+      });
+    }
+
+    loadRanking();
+  </script>
+</body>
+</html>
