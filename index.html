@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>章別タイピングゲーム（完全動作版）</title>
+  <title>章別タイピングゲーム（完全版）</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
     #chapter { font-size: 1.5em; margin-bottom: 10px; }
@@ -43,18 +43,23 @@
   </div>
 
   <script>
-    // 🔧 Firebaseの設定情報（ご自身の値で差し替えてください）
-    const firebaseConfig = {
-      apiKey: "ここに自分のAPIキー",
-      authDomain: "your-app.firebaseapp.com",
-      databaseURL: "https://your-app.firebaseio.com",
-      projectId: "your-app",
-      storageBucket: "your-app.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // ✅ Firebase設定（朝山さんの値で差し替えてください）
+    let db = null;
+    try {
+      const firebaseConfig = {
+        apiKey: "あなたのAPIキー",
+        authDomain: "your-project.firebaseapp.com",
+        databaseURL: "https://your-project.firebaseio.com",
+        projectId: "your-project",
+        storageBucket: "your-project.appspot.com",
+        messagingSenderId: "1234567890",
+        appId: "1:1234567890:web:abcdef123456"
+      };
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    } catch (e) {
+      console.warn("⚠️ Firebaseが初期化できませんでした:", e);
+    }
 
     const chapters = [
       { name: "第1章", words: ["cat","dog","sun","tree","book","car","pen","fish","home","milk"], maxMiss: 2 },
@@ -63,6 +68,7 @@
     ];
 
     let currentChapter = 0, currentWord = "", count = 0, misses = 0, startTime, timerId;
+
     const inputEl = document.getElementById("input");
     const wordEl = document.getElementById("word");
     const resultEl = document.getElementById("result");
@@ -104,7 +110,7 @@
         const rank = getRank(misses);
         resultEl.innerHTML = `クリア！ ミス: ${misses}回 - ランク: ${rank}`;
         const name = prompt("名前を入力してください（匿名OK）:");
-        if (name) db.ref("ranking").push({ name, misses, chapter: chapter.name });
+        if (db && name) db.ref("ranking").push({ name, misses, chapter: chapter.name });
         if (currentChapter < chapters.length - 1) {
           nextBtn.style.display = "block";
         } else {
@@ -167,10 +173,5 @@
 
     function loadRanking() {
       table.innerHTML = "<tr><th>名前</th><th>ミス</th><th>章</th></tr>";
-      db.ref("ranking").limitToLast(10).once("value", snapshot => {
-        const data = snapshot.val();
-        if (data) {
-          const entries = Object.values(data).sort((a, b) => a.misses - b.misses);
-          entries.forEach(entry => {
-            const n = entry.name || "名無し";
-            const m = typeof entry.misses === "number" ? entry.misses : "？
+      if (!db) return;
+      db.ref("ranking").limitToLast(10).once("
