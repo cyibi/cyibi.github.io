@@ -2,47 +2,83 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>タイピングゲーム</title>
-
-  <!-- ✅ あなたのAdSense広告スクリプト -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
-    crossorigin="anonymous"></script>
-
+  <title>章別タイピングゲーム</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 30px; background: #f9f9f9; }
+    body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
+    #chapter { font-size: 1.5em; margin-bottom: 10px; }
     #word { font-size: 2em; margin: 20px; color: #333; }
-    #input { font-size: 1.5em; padding: 8px; width: 80%; max-width: 400px; }
-    #result { margin-top: 20px; font-weight: bold; }
+    #input { font-size: 1.2em; padding: 8px; width: 80%; max-width: 400px; }
+    #result, #timer { margin-top: 20px; font-weight: bold; }
+    #startBtn { padding: 10px 20px; font-size: 1em; margin: 20px auto; display: block; }
   </style>
 </head>
 <body>
-  <h1>タイピングゲーム</h1>
-  <p id="word">loading...</p>
-  <input type="text" id="input" placeholder="ここにタイピング" autofocus />
+  <h1>章別タイピングゲーム</h1>
+  <div id="chapter"></div>
+  <div id="word">章を開始するにはボタンを押してください</div>
+  <input type="text" id="input" placeholder="ここにタイピング" disabled />
+  <button id="startBtn">第1章 スタート</button>
   <div id="result"></div>
-
-  <!-- 🔽 広告表示位置（バナー形式の例） -->
-  <div style="margin-top: 30px;">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:320px;height:100px"
-         data-ad-client="ca-pub-3312473553198083"
-         data-ad-slot="1234567890"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
+  <div id="timer">残り時間: --秒</div>
 
   <script>
-    const words = ["apple", "banana", "keyboard", "computer", "javascript", "programming", "github"];
-    const wordEl = document.getElementById("word");
-    const inputEl = document.getElementById("input");
-    const resultEl = document.getElementById("result");
+    const chapters = [
+      { name: "第1章", words: ["cat", "dog", "sun", "tree", "book", "car", "pen", "fish", "home", "milk"], maxMiss: 2 },
+      { name: "第2章", words: ["window", "purple", "banana", "coffee", "guitar", "planet", "silver", "yellow", "butter", "bridge"], maxMiss: 3 },
+      { name: "第3章", words: ["elephant", "mountains", "adventure", "developer", "education", "beautiful", "javascript", "direction", "chocolate", "performance"], maxMiss: 2 }
+    ];
 
+    let currentChapter = 0;
     let currentWord = "";
+    let count = 0;
+    let misses = 0;
+    let startTime;
+    let timerId;
 
-    function setNewWord() {
-      currentWord = words[Math.floor(Math.random() * words.length)];
+    const inputEl = document.getElementById("input");
+    const wordEl = document.getElementById("word");
+    const resultEl = document.getElementById("result");
+    const chapterEl = document.getElementById("chapter");
+    const timerEl = document.getElementById("timer");
+    const startBtn = document.getElementById("startBtn");
+
+    function startChapter() {
+      startBtn.style.display = "none";
+      inputEl.disabled = false;
+      inputEl.focus();
+      count = 0;
+      misses = 0;
+      startTime = Date.now();
+      updateTimer();
+      timerId = setInterval(updateTimer, 1000);
+      nextWord();
+    }
+
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = 60 - elapsed;
+      timerEl.textContent = "残り時間: " + remaining + "秒";
+
+      if (remaining <= 0 || count >= 10) {
+        clearInterval(timerId);
+        inputEl.disabled = true;
+        resultEl.innerHTML = `クリア！ ミス: ${misses}回`;
+        if (currentChapter < chapters.length - 1) {
+          currentChapter++;
+          startBtn.textContent = `${chapters[currentChapter].name} スタート`;
+          startBtn.style.display = "block";
+          inputEl.value = "";
+          wordEl.textContent = "章を開始するにはボタンを押してください";
+        } else {
+          wordEl.textContent = "全章クリア！お疲れ様！";
+          timerEl.textContent = "";
+        }
+      }
+    }
+
+    function nextWord() {
+      const chapter = chapters[currentChapter];
+      currentWord = chapter.words[Math.floor(Math.random() * chapter.words.length)];
       wordEl.textContent = currentWord;
       inputEl.value = "";
       resultEl.textContent = "";
@@ -50,12 +86,17 @@
 
     inputEl.addEventListener("input", () => {
       if (inputEl.value === currentWord) {
-        resultEl.textContent = "正解！";
-        setTimeout(setNewWord, 1000);
+        count++;
+        nextWord();
+      } else if (!currentWord.startsWith(inputEl.value)) {
+        misses++;
       }
     });
 
-    setNewWord();
+    startBtn.addEventListener("click", () => {
+      chapterEl.textContent = chapters[currentChapter].name;
+      startChapter();
+    });
   </script>
 </body>
 </html>
