@@ -2,15 +2,19 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>章別タイピングゲーム（ランキング付き）</title>
+  <title>章別タイピングゲーム（チャレンジ付き）</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 30px; background: #f2f2f2; }
     #chapter { font-size: 1.5em; margin-bottom: 10px; }
     #word { font-size: 2em; margin: 20px; color: #333; }
     #input { font-size: 1.2em; padding: 8px; width: 80%; max-width: 400px; }
     #result, #timer { margin-top: 20px; font-weight: bold; }
-    #startBtn, #nextBtn { padding: 10px 20px; font-size: 1em; margin: 20px auto; display: block; }
-    #nextBtn { display: none; background: #4CAF50; color: white; border: none; border-radius: 5px; }
+    #startBtn, #nextBtn, #retryBtn, #quitBtn {
+      padding: 10px 20px; font-size: 1em; margin: 10px auto; display: block;
+    }
+    #nextBtn, #retryBtn, #quitBtn { display: none; }
+    #retryBtn { background: orange; color: white; border: none; border-radius: 5px; }
+    #quitBtn { background: #999; color: white; border: none; border-radius: 5px; }
     #ranking { margin-top: 30px; text-align: left; display: inline-block; background: #fff; padding: 10px; border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { padding: 6px 10px; border-bottom: 1px solid #ccc; }
@@ -26,6 +30,8 @@
   <input type="text" id="input" placeholder="ここにタイピング" disabled />
   <button id="startBtn">第1章 スタート</button>
   <button id="nextBtn">次の章へ進む</button>
+  <button id="retryBtn">もう一度チャレンジ</button>
+  <button id="quitBtn">ゲームをやめる</button>
   <div id="result"></div>
   <div id="timer">残り時間: --秒</div>
 
@@ -57,8 +63,8 @@
       { name: "第2章", words: ["window","purple","banana","coffee","guitar","planet","silver","yellow","butter","bridge"], maxMiss: 3 },
       { name: "第3章", words: ["elephant","mountains","adventure","developer","education","beautiful","javascript","direction","chocolate","performance"], maxMiss: 2 }
     ];
-    let currentChapter = 0, currentWord = "", count = 0, misses = 0, startTime, timerId;
 
+    let currentChapter = 0, currentWord = "", count = 0, misses = 0, startTime, timerId;
     const inputEl = document.getElementById("input");
     const wordEl = document.getElementById("word");
     const resultEl = document.getElementById("result");
@@ -66,11 +72,15 @@
     const timerEl = document.getElementById("timer");
     const startBtn = document.getElementById("startBtn");
     const nextBtn = document.getElementById("nextBtn");
+    const retryBtn = document.getElementById("retryBtn");
+    const quitBtn = document.getElementById("quitBtn");
     const table = document.getElementById("rankingTable");
 
     function startChapter() {
       startBtn.style.display = "none";
       nextBtn.style.display = "none";
+      retryBtn.style.display = "none";
+      quitBtn.style.display = "none";
       inputEl.disabled = false;
       inputEl.focus();
       count = 0;
@@ -85,22 +95,34 @@
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const remaining = 60 - elapsed;
       timerEl.textContent = "残り時間: " + remaining + "秒";
+
       if (remaining <= 0 || count >= 10) {
         clearInterval(timerId);
         inputEl.disabled = true;
+
+        const chapter = chapters[currentChapter];
+        if (misses > chapter.maxMiss) {
+          resultEl.textContent = `失敗… ミス: ${misses}回（許容 ${chapter.maxMiss}回まで）`;
+          wordEl.textContent = "リトライか、ゲームを終了できます";
+          retryBtn.style.display = "inline-block";
+          quitBtn.style.display = "inline-block";
+          return;
+        }
+
         const rank = getRank(misses);
         resultEl.innerHTML = `クリア！ ミス: ${misses}回 - ランク: ${rank}`;
         const name = prompt("名前を入力してください（匿名OK）:");
         if (name) {
-          const chapter = chapters[currentChapter].name;
-          db.ref("ranking").push({ name, misses, chapter });
+          db.ref("ranking").push({ name, misses, chapter: chapter.name });
         }
+
         if (currentChapter < chapters.length - 1) {
           nextBtn.style.display = "block";
         } else {
           wordEl.textContent = "全章クリア！お疲れ様！";
           timerEl.textContent = "";
         }
+
         loadRanking();
       }
     }
@@ -145,22 +167,23 @@
       resultEl.textContent = "";
     });
 
+    retryBtn.addEventListener("click", () => {
+      chapterEl.textContent = chapters[currentChapter].name;
+      startBtn.textContent = `${chapters[currentChapter].name} スタート`;
+      startBtn.style.display = "block";
+      retryBtn.style.display = "none";
+      quitBtn.style.display = "none";
+      wordEl.textContent = "再チャレンジできます";
+      resultEl.textContent = "";
+    });
+
+    quitBtn.addEventListener("click", () => {
+      location.reload();
+    });
+
     function loadRanking() {
       table.innerHTML = "<tr><th>名前</th><th>ミス</th><th>章</th></tr>";
       db.ref("ranking").limitToLast(10).once("value", snapshot => {
         const data = snapshot.val();
         if (data) {
-          const entries = Object.values(data).sort((a, b) => a.misses - b.misses);
-          entries.forEach(entry => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${entry.name}</td><td>${entry.misses}</td><td>${entry.chapter}</td>`;
-            table.appendChild(tr);
-          });
-        }
-      });
-    }
-
-    loadRanking();
-  </script>
-</body>
-</html>
+          const entries = Object.values(data).sort((a
