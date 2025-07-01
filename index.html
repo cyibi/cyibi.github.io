@@ -1,120 +1,34 @@
-    const chapters = [
-      { name: "第1章", words: ["cat","dog","sun","tree","book","car","pen","fish","home","milk"], maxMiss: 2 },
-      { name: "第2章", words: ["window","purple","banana","coffee","guitar","planet","silver","yellow","butter","bridge"], maxMiss: 3 },
-      { name: "第3章", words: ["elephant","mountains","adventure","developer","education","beautiful","javascript","direction","chocolate","performance"], maxMiss: 2 }
-    ];
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>章別タイピングゲーム｜無料で楽しくタイピング練習！</title>
+</head>
+<body>
+  <!-- ナビゲーション -->
+  <nav>
+    <a href="index.html">ホーム</a> |
+    <a href="howto.html">遊び方</a> |
+    <a href="tips.html">上達のコツ</a> |
+    <a href="story.html">開発の裏話</a> |
+    <a href="privacy.html">プライバシーポリシー</a> |
+    <a href="contact.html">お問い合わせ</a>
+  </nav>
 
-    let currentChapter = 0, currentWord = "", count = 0, misses = 0, startTime, timerId;
-    const inputEl = document.getElementById("input");
-    const wordEl = document.getElementById("word");
-    const resultEl = document.getElementById("result");
-    const chapterEl = document.getElementById("chapter");
-    const timerEl = document.getElementById("timer");
-    const startBtn = document.getElementById("startBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const retryBtn = document.getElementById("retryBtn");
-    const quitBtn = document.getElementById("quitBtn");
-    const table = document.getElementById("rankingTable");
+  <h1>章別タイピングゲームへようこそ！</h1>
+  <p>このアプリでは、初心者から上級者まで楽しくタイピング練習ができます。章ごとに異なる文章で、段階的にスキルアップを目指しましょう。</p>
 
-    function startChapter() {
-      [startBtn, nextBtn, retryBtn, quitBtn].forEach(btn => btn.style.display = "none");
-      inputEl.disabled = false;
-      inputEl.focus();
-      count = 0;
-      misses = 0;
-      startTime = Date.now();
-      updateTimer();
-      timerId = setInterval(updateTimer, 1000);
-      nextWord();
-    }
-
-    function updateTimer() {
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const remaining = 60 - elapsed;
-      timerEl.textContent = "残り時間: " + remaining + "秒";
-      if (remaining <= 0 || count >= 10) {
-        clearInterval(timerId);
-        inputEl.disabled = true;
-        const chapter = chapters[currentChapter];
-        if (misses > chapter.maxMiss) {
-          resultEl.textContent = `失敗… ミス: ${misses}回（許容 ${chapter.maxMiss}回まで）`;
-          wordEl.textContent = "リトライか、ゲームを終了できます";
-          retryBtn.style.display = "inline-block";
-          quitBtn.style.display = "inline-block";
-          return;
-        }
-        const rank = getRank(misses);
-        resultEl.innerHTML = `クリア！ ミス: ${misses}回 - ランク: ${rank}`;
-        const name = prompt("名前を入力してください（匿名OK）:");
-        if (name) db.ref("ranking").push({ name, misses, chapter: chapter.name });
-        if (currentChapter < chapters.length - 1) {
-          nextBtn.style.display = "block";
-        } else {
-          wordEl.textContent = "全章クリア！お疲れ様！";
-          timerEl.textContent = "";
-        }
-        loadRanking();
-      }
-    }
-
-    function getRank(miss) {
-      if (miss === 0) return "S";
-      if (miss <= 2) return "A";
-      if (miss <= 4) return "B";
-      if (miss <= 6) return "C";
-      return "D";
-    }
-
-    function nextWord() {
-      const chapter = chapters[currentChapter];
-      currentWord = chapter.words[Math.floor(Math.random() * chapter.words.length)];
-      wordEl.textContent = currentWord;
-      inputEl.value = "";
-      resultEl.textContent = "";
-    }
-
-    inputEl.addEventListener("input", () => {
-      if (inputEl.value === currentWord) {
-        count++;
-        nextWord();
-      } else if (!currentWord.startsWith(inputEl.value)) {
-        misses++;
-      }
-    });
-
-    startBtn.addEventListener("click", () => {
-      chapterEl.textContent = chapters[currentChapter].name;
-      startChapter();
-    });
-
-    nextBtn.addEventListener("click", () => {
-      currentChapter++;
-      chapterEl.textContent = chapters[currentChapter].name;
-      startBtn.textContent = `${chapters[currentChapter].name} スタート`;
-      startBtn.style.display = "block";
-      wordEl.textContent = "章を開始するにはボタンを押してください";
-      resultEl.textContent = "";
-    });
-
-    retryBtn.addEventListener("click", () => {
-      startBtn.textContent = `${chapters[currentChapter].name} スタート`;
-      startBtn.style.display = "block";
-      resultEl.textContent = "";
-      wordEl.textContent = "再チャレンジできます";
-      retryBtn.style.display = "none";
-      quitBtn.style.display = "none";
-    });
-
-    quitBtn.addEventListener("click", () => location.reload());
-
-    function loadRanking() {
-      table.innerHTML = "<tr><th>名前</th><th>ミス</th><th>章</th></tr>";
-      db.ref("ranking").orderByChild("misses").limitToFirst(10).once("value", snap => {
-        snap.forEach(child => {
-          const r = child.val();
-          const row = document.createElement("tr");
-          row.innerHTML = `<td>${r.name}</td><td>${r.misses}</td><td>${r.chapter}</td>`;
-          table.appendChild(row);
-        });
-      });
-    }
+  <!-- 広告表示エリア -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
+     crossorigin="anonymous"></script>
+  <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3312473553198083"
+     data-ad-slot="3451371793"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</body>
+</html>
