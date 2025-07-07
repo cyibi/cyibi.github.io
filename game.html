@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>章別タイピングゲーム｜無料で楽しくタイピング練習！</title>
+</head>
 <body>
   <!-- ナビゲーション -->
   <nav>
@@ -9,18 +15,23 @@
     <a href="contact.html">お問い合わせ</a>
   </nav>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>タイピングゲーム</title>
-  <script src="typing.js" defer></script>
-</head>
-<body>
   <h1>タイピングゲーム</h1>
+
+  <!-- 年齢指定 -->
+  <label for="age">対象年齢：</label>
+  <select id="age">
+    <option value="6">6歳</option>
+    <option value="8">8歳</option>
+    <option value="10">10歳</option>
+    <option value="12">12歳</option>
+  </select>
+
   <p>お題：<span id="word">スタートを押してね！</span></p>
   <input type="text" id="input" placeholder="ここに入力" disabled />
   <button id="start">スタート</button>
   <p id="result"></p>
+
+  <!-- JavaScript 読み込み -->
+  <script src="typing.js"></script>
 </body>
 </html>
