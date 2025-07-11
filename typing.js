@@ -1,36 +1,36 @@
-const questions = {
-  "6": {
-    "animal": ["いぬ", "ねこ", "うさぎ", "ぞう", "とり"],
-    "game": ["かくれんぼ", "すごろく", "おにごっこ", "たからさがし"]
-  },
-  "8": {
-    "game": ["マインクラフト", "フォートナイト", "マリオ", "ゼルダ"],
-    "anime": ["ドラえもん", "ポケモン", "クレヨンしんちゃん", "名探偵コナン"]
-  }
-};
-
-let currentQuestion = 0;
-let score = 0;
-let startTime;
-let timer;
-let selectedSet = [];
-
+const questions = window.questions; // グローバル定義のquestions.jsを参照
 const wordSpan = document.getElementById("word");
 const inputField = document.getElementById("input");
 const startBtn = document.getElementById("start");
 const result = document.getElementById("result");
 
+let currentQuestion = 0;
+let score = 0;
+let selectedSet = [];
+let startTime;
+let timer;
+
+const genreMap = {
+  "ゲーム": "game",
+  "アニメ": "anime",
+  "動物": "animal",
+  "キャラクター": "character",
+  "YouTube": "youtube"
+};
+
 startBtn.addEventListener("click", () => {
   const age = document.getElementById("age").value;
-  const genre = document.getElementById("genre").value;
-  selectedSet = [...(questions[age]?.[genre] || [])];
+  const selectedGenre = document.getElementById("genre").value;
+  const genre = genreMap[selectedGenre];
 
-  if (selectedSet.length < 5) {
-    alert("十分な問題がありません");
+  const wordList = questions?.[age]?.[genre];
+
+  if (!wordList || wordList.length < 5) {
+    alert("十分な問題がありません（ジャンルや年齢を見直してください）");
     return;
   }
 
-  selectedSet = shuffleArray(selectedSet).slice(0, 5);
+  selectedSet = shuffleArray(wordList).slice(0, 5);
   currentQuestion = 0;
   score = 0;
   inputField.disabled = false;
@@ -51,9 +51,7 @@ function checkAnswer() {
   const typed = inputField.value.trim();
   const correct = selectedSet[currentQuestion];
 
-  if (typed === correct) {
-    score++;
-  }
+  if (typed === correct) score++;
 
   currentQuestion++;
   inputField.value = "";
