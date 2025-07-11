@@ -38,10 +38,15 @@
     <option value="YouTube">YouTube</option>
   </select>
 
+  <!-- 確定ボタン -->
+  <button id="confirm">この条件で出題する</button>
+
   <!-- 出題＆タイピング入力 -->
-  <p>お題：<span id="word">スタートを押してね！</span></p>
-  <input type="text" id="input" placeholder="ここに入力" />
-  <button id="start">スタート</button>
+  <p>お題：<span id="word">ジャンルを選んで確定してください</span></p>
+  <input type="text" id="input" placeholder="ここに入力" disabled />
+
+  <!-- スタートボタン -->
+  <button id="start" disabled>タイピング開始！</button>
   <p id="result"></p>
 
   <!-- JavaScript 読み込み -->
