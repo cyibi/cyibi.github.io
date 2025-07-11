@@ -18,16 +18,15 @@ const genreMap = {
   "YouTube": "youtube"
 };
 
-// 🔹 「この条件で出題する」を押した時の処理
+// ✅ 「この条件で出題する」ボタンの処理
 confirmBtn.addEventListener("click", () => {
   const age = document.getElementById("age").value;
-  const selectedGenre = document.getElementById("genre").value;
-  const genre = genreMap[selectedGenre];
+  const genreText = document.getElementById("genre").value;
+  const genre = genreMap[genreText];
   const wordList = questions?.[age]?.[genre];
 
   if (!wordList || wordList.length < 5) {
-    alert("十分な問題がありません（ジャンルや年齢を見直してください）");
-    wordSpan.textContent = "選択された条件では問題が不足しています";
+    wordSpan.textContent = "選択された条件では問題が足りません";
     startBtn.setAttribute("disabled", "true");
     inputField.setAttribute("disabled", "true");
     return;
@@ -37,19 +36,17 @@ confirmBtn.addEventListener("click", () => {
   currentQuestion = 0;
   score = 0;
 
-  wordSpan.textContent = `お題（1問目）：${selectedSet[currentQuestion]}`;
-  result.textContent = "この問題でタイピング開始できます！";
+  wordSpan.textContent = `お題（1問目）：${selectedSet[0]}`;
+  result.textContent = "このお題でタイピングできます";
 
-  // 🔸 入力欄を有効化＆カーソルを入れる
   inputField.removeAttribute("disabled");
   inputField.value = "";
   setTimeout(() => inputField.focus(), 50);
 
-  // 🔸 スタートボタン有効化
   startBtn.removeAttribute("disabled");
 });
 
-// 🔹 タイピング開始処理（タイマー開始）
+// ✅ 「タイピング開始！」ボタンの処理
 startBtn.addEventListener("click", () => {
   inputField.value = "";
   inputField.focus();
@@ -58,14 +55,14 @@ startBtn.addEventListener("click", () => {
   result.textContent = "";
 });
 
-// 🔹 タイピング入力処理
+// ✅ タイピング判定（Enterキー）
 inputField.addEventListener("keyup", (e) => {
   if (e.key === "Enter") {
     checkAnswer();
   }
 });
 
-// 🔹 正誤判定と次の出題
+// ✅ 答えをチェック＆次の問題
 function checkAnswer() {
   const typed = inputField.value.trim();
   const correct = selectedSet[currentQuestion];
@@ -88,13 +85,13 @@ function checkAnswer() {
   }
 }
 
-// 🔹 タイマー表示更新
+// ✅ 時間表示
 function updateTimer() {
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   result.textContent = `現在のスコア：${score} / ${selectedSet.length}　経過時間：${elapsed}秒`;
 }
 
-// 🔹 配列シャッフル
+// ✅ 配列をシャッフルする関数
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
