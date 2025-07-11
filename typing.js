@@ -1,4 +1,4 @@
-const questions = window.questions; // グローバル定義のquestions.jsを参照
+const questions = window.questions;
 const wordSpan = document.getElementById("word");
 const inputField = document.getElementById("input");
 const startBtn = document.getElementById("start");
@@ -22,7 +22,6 @@ startBtn.addEventListener("click", () => {
   const age = document.getElementById("age").value;
   const selectedGenre = document.getElementById("genre").value;
   const genre = genreMap[selectedGenre];
-
   const wordList = questions?.[age]?.[genre];
 
   if (!wordList || wordList.length < 5) {
@@ -33,9 +32,15 @@ startBtn.addEventListener("click", () => {
   selectedSet = shuffleArray(wordList).slice(0, 5);
   currentQuestion = 0;
   score = 0;
-  inputField.disabled = false;
+
+  // ✅ 入力欄の設定を明示的に初期化
+  inputField.removeAttribute("disabled");
+  inputField.setAttribute("autocomplete", "off"); // 入力補完オフ
+  inputField.style.visibility = "visible";        // 非表示対策
+  inputField.style.pointerEvents = "auto";        // 入力イベントを有効にする
   inputField.value = "";
   inputField.focus();
+
   wordSpan.textContent = selectedSet[currentQuestion];
   startTime = Date.now();
   timer = setInterval(updateTimer, 1000);
@@ -62,7 +67,7 @@ function checkAnswer() {
     clearInterval(timer);
     const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
     result.textContent = `スコア：${score} / 5　時間：${timeTaken}秒`;
-    inputField.disabled = true;
+    inputField.setAttribute("disabled", "true"); // 入力無効化
   }
 }
 
