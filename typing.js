@@ -33,13 +33,16 @@ startBtn.addEventListener("click", () => {
   currentQuestion = 0;
   score = 0;
 
-  // ✅ 入力欄の設定を明示的に初期化
+  // 入力欄の設定とカーソルの強制挿入（setTimeoutで確実に反映）
   inputField.removeAttribute("disabled");
-  inputField.setAttribute("autocomplete", "off"); // 入力補完オフ
-  inputField.style.visibility = "visible";        // 非表示対策
-  inputField.style.pointerEvents = "auto";        // 入力イベントを有効にする
+  inputField.setAttribute("autocomplete", "off");
+  inputField.style.visibility = "visible";
+  inputField.style.pointerEvents = "auto";
   inputField.value = "";
-  inputField.focus();
+
+  setTimeout(() => {
+    inputField.focus();
+  }, 50); // ←タイミング調整
 
   wordSpan.textContent = selectedSet[currentQuestion];
   startTime = Date.now();
@@ -63,11 +66,12 @@ function checkAnswer() {
 
   if (currentQuestion < selectedSet.length) {
     wordSpan.textContent = selectedSet[currentQuestion];
+    setTimeout(() => inputField.focus(), 50); // 次の問題にもフォーカス
   } else {
     clearInterval(timer);
     const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
     result.textContent = `スコア：${score} / 5　時間：${timeTaken}秒`;
-    inputField.setAttribute("disabled", "true"); // 入力無効化
+    inputField.setAttribute("disabled", "true");
   }
 }
 
