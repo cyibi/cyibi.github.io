@@ -1,4 +1,3 @@
-const questions = window.questions;
 const wordSpan = document.getElementById("word");
 const inputField = document.getElementById("input");
 const startBtn = document.getElementById("start");
