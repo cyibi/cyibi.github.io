@@ -1,15 +1,22 @@
+// ✅ 要素取得
 const wordSpan = document.getElementById("word");
 const inputField = document.getElementById("input");
 const startBtn = document.getElementById("start");
 const confirmBtn = document.getElementById("confirm");
 const result = document.getElementById("result");
 
+// ✅ 定数：最低出題数と出題数設定
+const MIN_QUESTIONS = 5;
+const QUESTION_COUNT = 5; // 必要に応じて10や20に変更可能
+
+// ✅ 初期変数
 let currentQuestion = 0;
 let score = 0;
 let selectedSet = [];
 let startTime;
 let timer;
 
+// ✅ ジャンルマップ（日本語→英語）
 const genreMap = {
   "ゲーム": "game",
   "アニメ": "anime",
@@ -25,25 +32,26 @@ confirmBtn.addEventListener("click", () => {
   const genre = genreMap[genreText];
   const wordList = questions?.[age]?.[genre];
 
-  if (!wordList || wordList.length < 5) {
-    wordSpan.textContent = "選択された条件では問題が足りません";
-    startBtn.setAttribute("disabled", "true");
-    inputField.setAttribute("disabled", "true");
+  if (!wordList || wordList.length < MIN_QUESTIONS) {
+    wordSpan.textContent = `「${genreText}」ジャンルの問題が${MIN_QUESTIONS}問以上ありません`;
+    startBtn.disabled = true;
+    inputField.disabled = true;
     return;
   }
 
-  selectedSet = shuffleArray(wordList).slice(0, 5);
+  // ランダム選択
+  selectedSet = shuffleArray(wordList).slice(0, QUESTION_COUNT);
   currentQuestion = 0;
   score = 0;
 
-  wordSpan.textContent = `お題（1問目）：${selectedSet[0]}`;
+  wordSpan.textContent = `お題（1 / ${selectedSet.length}）：${selectedSet[0]}`;
   result.textContent = "このお題でタイピングできます";
 
-  inputField.removeAttribute("disabled");
+  inputField.disabled = false;
   inputField.value = "";
   setTimeout(() => inputField.focus(), 50);
 
-  startBtn.removeAttribute("disabled");
+  startBtn.disabled = false;
 });
 
 // ✅ 「タイピング開始！」ボタンの処理
@@ -62,7 +70,7 @@ inputField.addEventListener("keyup", (e) => {
   }
 });
 
-// ✅ 答えをチェック＆次の問題
+// ✅ 答えチェック＆次へ
 function checkAnswer() {
   const typed = inputField.value.trim();
   const correct = selectedSet[currentQuestion];
@@ -73,25 +81,25 @@ function checkAnswer() {
   inputField.value = "";
 
   if (currentQuestion < selectedSet.length) {
-    wordSpan.textContent = `お題（${currentQuestion + 1}問目）：${selectedSet[currentQuestion]}`;
+    wordSpan.textContent = `お題（${currentQuestion + 1} / ${selectedSet.length}）：${selectedSet[currentQuestion]}`;
     setTimeout(() => inputField.focus(), 50);
   } else {
     clearInterval(timer);
     const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
     result.textContent = `スコア：${score} / ${selectedSet.length}　時間：${timeTaken}秒`;
-    wordSpan.textContent = "おつかれさま！もう一度選んで挑戦できます";
-    inputField.setAttribute("disabled", "true");
-    startBtn.setAttribute("disabled", "true");
+    wordSpan.textContent = "おつかれさま！もう一度条件を選んで挑戦できます";
+    inputField.disabled = true;
+    startBtn.disabled = true;
   }
 }
 
-// ✅ 時間表示
+// ✅ 時間表示更新
 function updateTimer() {
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   result.textContent = `現在のスコア：${score} / ${selectedSet.length}　経過時間：${elapsed}秒`;
 }
 
-// ✅ 配列をシャッフルする関数
+// ✅ 配列シャッフル関数
 function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
