@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>章別タイピングゲーム｜無料で楽しくタイピング練習！</title>
-  <meta name="description" content="章別タイピングゲームは、初心者から上級者まで楽しくタイピング練習ができる無料Webアプリです。教育目的にも最適！">
+  <title>章別タイピング＆時計クイズ｜無料で楽しく学習！</title>
+  <meta name="description" content="章別タイピングゲームと時計クイズで、楽しくタイピング練習と時間の読み方を学べる無料Webアプリ。教育目的にも最適！">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -12,11 +12,25 @@
       padding: 20px;
       max-width: 800px;
       margin: auto;
+      background-color: #f9f9f9;
+    }
+    nav {
+      margin-bottom: 20px;
     }
     nav a {
       margin-right: 10px;
       text-decoration: none;
       color: #0077cc;
+    }
+    h1 {
+      color: #333;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #444;
+    }
+    ul {
+      padding-left: 20px;
     }
     .start-button {
       display: inline-block;
@@ -26,6 +40,10 @@
       text-decoration: none;
       border-radius: 5px;
       margin-top: 20px;
+      font-size: 18px;
+    }
+    .clock-button {
+      background-color: #2196F3;
     }
   </style>
 </head>
@@ -40,21 +58,28 @@
     <a href="privacy.html">プライバシーポリシー</a>
   </nav>
 
-  <h1>章別タイピングゲームへようこそ！</h1>
-  <p>このアプリでは、初心者から上級者まで楽しくタイピング練習ができます。章ごとに異なる文章で、段階的にスキルアップを目指しましょう。</p>
+  <h1>章別タイピング＆時計クイズへようこそ！</h1>
+  <p>このWebアプリでは、タイピング練習と時計の読み方を楽しく学べます。小学生から大人まで、教育目的にも最適です。</p>
 
-  <h2>このゲームの特徴</h2>
+  <!-- タイピングゲーム紹介 -->
+  <h2>章別タイピングゲーム</h2>
+  <p>初心者から上級者まで、章ごとに異なる文章でタイピング練習ができます。段階的にスキルアップを目指しましょう。</p>
   <ul>
     <li>章ごとに異なる文章で、飽きずに練習できる</li>
     <li>初心者向けのやさしい文章からスタート</li>
     <li>タイピング速度や正確さを記録して、成長を実感</li>
   </ul>
+  <a href="game.html" class="start-button">▶ タイピングゲームスタート</a>
 
-  <h2>おすすめの使い方</h2>
-  <p>このゲームは小学生から大人まで幅広く楽しめます。保護者の方が一緒に遊ぶことで、タイピング練習がより楽しくなります。</p>
-
-  <!-- ゲームスタートボタン -->
-  <a href="game.html" class="start-button">▶ ゲームスタート</a>
+  <!-- 時計クイズゲーム紹介 -->
+  <h2>新しく追加！時計クイズゲーム</h2>
+  <p>アナログ時計を見て、正しい時刻を選ぶクイズ形式のゲームです。時間の読み方を楽しく学べます。</p>
+  <ul>
+    <li>時計を見て、選択肢から正しい時刻を選ぶ</li>
+    <li>視覚的に学べるので、低学年にもぴったり</li>
+    <li>正解・不正解のフィードバックで理解が深まる</li>
+  </ul>
+  <a href="clock-quiz.html" class="start-button clock-button">▶ 時計クイズスタート</a>
 
 </body>
 </html>
