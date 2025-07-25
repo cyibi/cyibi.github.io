@@ -45,6 +45,34 @@
     .clock-button {
       background-color: #2196F3;
     }
+    .level-selector button {
+      padding: 8px 16px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ffc107;
+      cursor: pointer;
+    }
+    #quiz-area ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    #quiz-area li {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+    #quiz-area strong {
+      color: #333;
+    }
+    #quiz-area em {
+      color: #555;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -80,6 +108,37 @@
     <li>正解・不正解のフィードバックで理解が深まる</li>
   </ul>
   <a href="clock-quiz.html" class="start-button clock-button">▶！開設中！ 時計クイズスタート</a>
+
+  <!-- 時計クイズのJS出題エリア -->
+  <h2>時計クイズに挑戦しよう！（レベル別出題）</h2>
+  <p>ボタンを選んで、レベルごとの時計クイズを表示してみましょう。</p>
+
+  <div class="level-selector">
+    <button onclick="showQuiz('level1')">レベル1</button>
+    <button onclick="showQuiz('level2')">レベル2</button>
+    <button onclick="showQuiz('level3')">レベル3</button>
+  </div>
+
+  <div id="quiz-area"></div>
+
+  <!-- JavaScript読み込み -->
+  <script src="clock_game.js"></script>
+  <script>
+    function showQuiz(level) {
+      const container = document.getElementById("quiz-area");
+      container.innerHTML = "";
+
+      const list = document.createElement("ul");
+
+      clockQuizData[level].forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>Q${index + 1}:</strong> ${item.q}<br><em>答え：</em> ${item.a}`;
+        list.appendChild(li);
+      });
+
+      container.appendChild(list);
+    }
+  </script>
 
 </body>
 </html>
