@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>時計タイピングゲーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+      background: #f0f8ff;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .quiz-box {
+      margin-bottom: 30px;
+      background: #e0f7fa;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    }
+    input[type="text"] {
+      width: 100%;
+      font-size: 1em;
+      padding: 10px;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 1em;
+    }
+    .correct {
+      color: #4CAF50;
+    }
+    .wrong {
+      color: #F44336;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⏰ 時計タイピングゲーム</h1>
+  <div id="quiz-area"></div>
+
+  <script src="clock_game.js"></script>
+  <script>
+    const container = document.getElementById("quiz-area");
+
+    // 問題出力
+    clockQuizData.level1.forEach((item, index) => {
+      const box = document.createElement("div");
+      box.className = "quiz-box";
+      box.innerHTML = `
+        <strong>Q${index + 1}：</strong> ${item.q}<br>
+        <input type="text" placeholder="答えを入力してEnter" onkeyup="checkAnswer(this, '${item.a}')">
+        <div class="feedback"></div>
+      `;
+      container.appendChild(box);
+    });
+
+    // 判定ロジック
+    function checkAnswer(input, correct) {
+      const feedback = input.nextElementSibling;
+      if (input.value.trim() === "") {
+        feedback.textContent = "";
+        feedback.className = "feedback";
+        return;
+      }
+      if (input.value.trim() === correct) {
+        feedback.textContent = "✅ 正解！";
+        feedback.className = "feedback correct";
+      } else {
+        feedback.textContent = "❌ 不正解...";
+        feedback.className = "feedback wrong";
+      }
+    }
+  </script>
+
+</body>
+</html>
