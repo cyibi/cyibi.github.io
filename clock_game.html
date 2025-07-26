@@ -2,111 +2,53 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>時計選択クイズ｜時間感覚を楽しく練習！</title>
+  <title>時計問題クイズ｜時間の感覚を楽しくトレーニング！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      padding: 30px;
-      max-width: 800px;
-      margin: auto;
-      background: #fffaf0;
-    }
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .quiz-box {
-      background: #e6f7ff;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-    }
-    .feedback {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .correct {
-      color: #2e7d32;
-    }
-    .wrong {
-      color: #c62828;
-    }
-    button {
-      margin-top: 10px;
-    }
-  </style>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>⏰ 時計の選択クイズ</h1>
+  <!-- 🧭 ナビゲーション（共通パーツ） -->
+  <nav>
+    <a href="index.html">ホーム</a> |
+    <a href="howto.html">遊び方</a> |
+    <a href="tips.html">上達のコツ</a> |
+    <a href="story.html">開発の裏話</a> |
+    <a href="privacy.html">プライバシーポリシー</a>
+  </nav>
+
+  <!-- タイトル -->
+  <h1>時計問題クイズ</h1>
+
+  <!-- ⌚ クイズ説明 -->
+  <p>出題される時計の問題に答えて、時間の感覚を身につけよう！</p>
+
+  <!-- ✅ 出題領域 -->
   <div id="quiz-area"></div>
 
-  <script>
-    const quizData = [
-      {
-        q: "8時20分に学校につくには、7時50分に家を出る必要があります。何分かかった？",
-        choices: ["15分", "20分", "30分"],
-        answer: "30分"
-      },
-      {
-        q: "朝7時に起きて、7時15分に朝ごはんを食べました。何分経ってる？",
-        choices: ["10分", "15分", "20分"],
-        answer: "15分"
-      },
-      {
-        q: "9時45分に公園に着きたい。30分かかるなら、何時に家を出る？",
-        choices: ["9時15分", "9時", "9時30分"],
-        answer: "9時15分"
-      }
-    ];
+  <!-- 📦 広告表示エリア -->
+  <div style="margin-top: 30px;">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
+     crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-3312473553198083"
+      data-ad-slot="3061133751"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
-    const container = document.getElementById("quiz-area");
+  <!-- 利用案内 -->
+  <p style="margin-top: 40px; font-size: 0.9em; color: #666;">
+    ※ 時計の読み方や時刻の計算を練習できるクイズです。選択肢を選んで楽しく答えましょう！
+  </p>
 
-    quizData.forEach((item, index) => {
-      const box = document.createElement("div");
-      box.className = "quiz-box";
-
-      const questionId = `q-${index}`;
-      const feedbackId = `feedback-${index}`;
-
-      let choicesHtml = item.choices.map((choice, i) => {
-        return `<label><input type="radio" name="${questionId}" value="${choice}"> ${i + 1}. ${choice}</label><br>`;
-      }).join("");
-
-      box.innerHTML = `
-        <strong>Q${index + 1}：</strong> ${item.q}<br><br>
-        ${choicesHtml}
-        <button onclick="checkAnswer('${questionId}', '${item.answer}', '${feedbackId}')">回答</button>
-        <div id="${feedbackId}" class="feedback"></div>
-      `;
-
-      container.appendChild(box);
-    });
-
-    function checkAnswer(name, correctAnswer, feedbackId) {
-      const options = document.getElementsByName(name);
-      const feedback = document.getElementById(feedbackId);
-      let selected = "";
-
-      options.forEach(opt => {
-        if (opt.checked) selected = opt.value;
-      });
-
-      if (selected === "") {
-        feedback.textContent = "⚠️ 選択してください";
-        feedback.className = "feedback wrong";
-      } else if (selected === correctAnswer) {
-        feedback.textContent = "✅ 正解！！";
-        feedback.className = "feedback correct";
-      } else {
-        feedback.textContent = `❌ 不正解... 正しくは「${correctAnswer}」`;
-        feedback.className = "feedback wrong";
-      }
-    }
-  </script>
+  <!-- 💻 JavaScript 読み込み -->
+  <script src="clock_game.js"></script>
 
 </body>
 </html>
