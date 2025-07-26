@@ -1,0 +1,102 @@
+[
+  {
+    "id": "q001",
+    "question": "7時30分の45分後は？",
+    "type": "text_choice",
+    "image": "clock_0730.svg",
+    "choices": ["8時15分", "8時00分", "7時45分"],
+    "correct": "8時15分",
+    "explanation": "7:30に45分足すと8:15になります。",
+    "time_limit": 30
+  },
+  {
+    "id": "q002",
+    "question": "時計が3時をさしています。どの画像が正しいでしょう？",
+    "type": "image_choice",
+    "image": "",
+    "choices": ["clock_0300.svg", "clock_0600.svg", "clock_0900.svg"],
+    "correct": "clock_0300.svg",
+    "explanation": "短針が3、長針が12を指すのが3時。",
+    "time_limit": 30
+  },
+  {
+    "id": "q003",
+    "question": "10時15分から30分前は何時ですか？",
+    "type": "text_choice",
+    "image": "clock_1015.svg",
+    "choices": ["9時45分", "10時45分", "9時15分"],
+    "correct": "9時45分",
+    "explanation": "10時15分から30分戻ると9時45分です。",
+    "time_limit": 30
+  },
+  {
+    "id": "q004",
+    "question": "時計が12時をさしています。何時でしょう？",
+    "type": "image_choice",
+    "image": "",
+    "choices": ["clock_1200.svg", "clock_0300.svg", "clock_0600.svg"],
+    "correct": "clock_1200.svg",
+    "explanation": "短針と長針が両方12を指すのが12時。",
+    "time_limit": 25
+  },
+  {
+    "id": "q005",
+    "question": "時計が5時45分をさしているとき、長針は何を指していますか？",
+    "type": "text_choice",
+    "image": "clock_0545.svg",
+    "choices": ["6", "9", "3"],
+    "correct": "9",
+    "explanation": "45分は長針が9の位置です。",
+    "time_limit": 30
+  },
+  {
+    "id": "q006",
+    "question": "朝ごはんを食べる時間はどれがよいでしょう？（生活場面）",
+    "type": "text_choice",
+    "image": "",
+    "choices": ["7時", "10時", "12時"],
+    "correct": "7時",
+    "explanation": "朝ごはんはだいたい7時前後が適切です。",
+    "time_limit": 20
+  },
+  {
+    "id": "q007",
+    "question": "30分後に学校につくには、8時に出発します。学校につくのは何時？",
+    "type": "text_choice",
+    "image": "clock_0800.svg",
+    "choices": ["8時30分", "9時00分", "7時30分"],
+    "correct": "8時30分",
+    "explanation": "8時に出て30分後は8時30分です。",
+    "time_limit": 30
+  },
+  {
+    "id": "q008",
+    "question": "時計が6時30分のとき、短針はどこを指していますか？",
+    "type": "text_choice",
+    "image": "clock_0630.svg",
+    "choices": ["6と7の間", "6の上", "7の上"],
+    "correct": "6と7の間",
+    "explanation": "短針は時間に比例して動きます。",
+    "time_limit": 35
+  },
+  {
+    "id": "q009",
+    "question": "時計が9時15分です。どれが正しい画像？",
+    "type": "image_choice",
+    "image": "",
+    "choices": ["clock_0915.svg", "clock_0900.svg", "clock_0930.svg"],
+    "correct": "clock_0915.svg",
+    "explanation": "15分は長針が3（15分）を指します。",
+    "time_limit": 30
+  },
+  {
+    "id": "q010",
+    "question": "学校は8時45分に始まります。30分前は何時ですか？",
+    "type": "text_choice",
+    "image": "clock_0845.svg",
+    "choices": ["8時15分", "9時15分", "7時45分"],
+    "correct": "8時15分",
+    "explanation": "8:45から30分前は8:15です。",
+    "time_limit": 30
+  }
+]
