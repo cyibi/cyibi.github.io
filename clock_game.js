@@ -1,5 +1,5 @@
 // 📁 clock_game_json.json の読み込み
-fetch("data/clock_game_json.json")
+fetch("clock_game_json.json")
   .then(response => response.json())
   .then(quizData => {
     const container = document.getElementById("quiz-area");
