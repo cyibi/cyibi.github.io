@@ -14,7 +14,7 @@ fetch("clock_game_json.json")
       // ⌚ 出題文＋問題画像（あれば）
       let questionHTML = `<strong>Q${index + 1}：</strong> ${item.question}<br>`;
       if (item.image) {
-        questionHTML += `<img src="images/${item.image}" alt="時計画像" class="clock-image"><br>`;
+        questionHTML += `<img src="img/${item.image}" alt="時計画像" class="Q1_clock.img"><br>`;
       }
 
       // 🔀 出題形式（text_choice or image_choice）
