@@ -3,7 +3,7 @@
     "id": "q001",
     "question": "7時30分の45分後は？",
     "type": "text_choice",
-    "image": "clock_0730.svg",
+    "image": "clock_0730.png",
     "choices": ["8時15分", "8時00分", "7時45分"],
     "correct": "8時15分",
     "explanation": "7:30に45分足すと8:15になります。",
