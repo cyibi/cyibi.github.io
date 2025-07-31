@@ -7,7 +7,7 @@ const result = document.getElementById("result");
 
 // ✅ 定数：最低出題数と出題数設定
 const MIN_QUESTIONS = 5;
-const QUESTION_COUNT = 5; // 必要に応じて10や20に変更可能
+const QUESTION_COUNT = 5;
 
 // ✅ 初期変数
 let currentQuestion = 0;
@@ -16,13 +16,13 @@ let selectedSet = [];
 let startTime;
 let timer;
 
-// ✅ ジャンルマップ（日本語→英語）
+// ✅ ジャンルマップ（HTMLのvalueと一致させる）
 const genreMap = {
   "ゲーム": "game",
   "アニメ": "anime",
   "動物": "animal",
   "キャラクター": "character",
-  "YouTube": "youtube"
+  "youtube": "youtube" // ← HTMLのvalueと一致
 };
 
 // ✅ 「この条件で出題する」ボタンの処理
@@ -30,10 +30,12 @@ confirmBtn.addEventListener("click", () => {
   const age = document.getElementById("age").value;
   const genreText = document.getElementById("genre").value;
   const genre = genreMap[genreText];
+
   const wordList = questions?.[age]?.[genre];
 
   if (!wordList || wordList.length < MIN_QUESTIONS) {
     wordSpan.textContent = `「${genreText}」ジャンルの問題が${MIN_QUESTIONS}問以上ありません`;
+    result.textContent = "ジャンルを変更するか、今後の追加をお待ちください";
     startBtn.disabled = true;
     inputField.disabled = true;
     return;
