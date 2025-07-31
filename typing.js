@@ -1,107 +1,78 @@
-// ✅ 要素取得
-const wordSpan = document.getElementById("word");
-const inputField = document.getElementById("input");
-const startBtn = document.getElementById("start");
-const confirmBtn = document.getElementById("confirm");
-const result = document.getElementById("result");
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>章別タイピングゲーム｜無料で楽しくタイピング練習！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+</head>
+<body>
+  <!-- ナビゲーション -->
+  <nav>
+    <a href="index.html">ホーム</a> |
+    <a href="howto.html">遊び方</a> |
+    <a href="tips.html">上達のコツ</a> |
+    <a href="story.html">開発の裏話</a> |
+    <a href="privacy.html">プライバシーポリシー</a> |
+  </nav>
 
-// ✅ 定数：最低出題数と出題数設定
-const MIN_QUESTIONS = 5;
-const QUESTION_COUNT = 5;
+  <h1>タイピングゲーム</h1>
 
-// ✅ 初期変数
-let currentQuestion = 0;
-let score = 0;
-let selectedSet = [];
-let startTime;
-let timer;
+  <!-- 年齢指定 -->
+  <label for="age">対象年齢：</label>
+  <select id="age">
+    <option value="6">6歳</option>
+    <option value="8">8歳</option>
+    <option value="10">10歳</option>
+    <option value="12">12歳</option>
+  </select>
 
-// ✅ ジャンルマップ（HTMLのvalueと一致させる）
-const genreMap = {
-  "ゲーム": "game",
-  "アニメ": "anime",
-  "動物": "animal",
-  "キャラクター": "character",
-  "youtube": "youtube" // ← HTMLのvalueと一致
-};
+  <!-- ジャンル指定 -->
+  <label for="genre">ジャンル：</label>
+  <select id="genre">
+    <option value="ゲーム">ゲーム</option>
+    <option value="アニメ">アニメ</option>
+    <option value="動物">動物</option>
+    <option value="キャラクター">キャラクター</option>
+    <option value="youtube">YouTube</option> <!-- valueを小文字に統一 -->
+  </select>
 
-// ✅ 「この条件で出題する」ボタンの処理
-confirmBtn.addEventListener("click", () => {
-  const age = document.getElementById("age").value;
-  const genreText = document.getElementById("genre").value;
-  const genre = genreMap[genreText];
+  <!-- 確定ボタン -->
+  <button id="confirm">この条件で出題する</button>
 
-  const wordList = questions?.[age]?.[genre];
+  <!-- 出題＆タイピング入力 -->
+  <p>お題：<span id="word">ジャンルを選んで確定してください</span></p>
+  <input type="text" id="input" placeholder="ここに入力" disabled />
 
-  if (!wordList || wordList.length < MIN_QUESTIONS) {
-    wordSpan.textContent = `「${genreText}」ジャンルの問題が${MIN_QUESTIONS}問以上ありません`;
-    result.textContent = "ジャンルを変更するか、今後の追加をお待ちください";
-    startBtn.disabled = true;
-    inputField.disabled = true;
-    return;
-  }
+  <!-- スタートボタン -->
+  <button id="start" disabled>タイピング開始！</button>
+  <p id="result"></p>
 
-  // ランダム選択
-  selectedSet = shuffleArray(wordList).slice(0, QUESTION_COUNT);
-  currentQuestion = 0;
-  score = 0;
+  <!-- フィードバック表示 -->
+  <p id="feedback" style="color: red; font-weight: bold;"></p>
 
-  wordSpan.textContent = `お題（1 / ${selectedSet.length}）：${selectedSet[0]}`;
-  result.textContent = "このお題でタイピングできます";
+  <!-- 広告表示エリア -->
+  <div style="margin-top: 30px;">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
+      crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-3312473553198083"
+      data-ad-slot="3451371793"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
-  inputField.disabled = false;
-  inputField.value = "";
-  setTimeout(() => inputField.focus(), 50);
+  <!-- 利用案内 -->
+  <p style="margin-top: 40px; font-size: 0.9em; color: #666;">
+    ※ 各ジャンルで1000問以上の練習問題が用意されています。条件を選んで楽しくタイピング力を高めましょう！
+  </p>
 
-  startBtn.disabled = false;
-});
-
-// ✅ 「タイピング開始！」ボタンの処理
-startBtn.addEventListener("click", () => {
-  inputField.value = "";
-  inputField.focus();
-  startTime = Date.now();
-  timer = setInterval(updateTimer, 1000);
-  result.textContent = "";
-});
-
-// ✅ タイピング判定（Enterキー）
-inputField.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {
-    checkAnswer();
-  }
-});
-
-// ✅ 答えチェック＆次へ
-function checkAnswer() {
-  const typed = inputField.value.trim();
-  const correct = selectedSet[currentQuestion];
-
-  if (typed === correct) score++;
-
-  currentQuestion++;
-  inputField.value = "";
-
-  if (currentQuestion < selectedSet.length) {
-    wordSpan.textContent = `お題（${currentQuestion + 1} / ${selectedSet.length}）：${selectedSet[currentQuestion]}`;
-    setTimeout(() => inputField.focus(), 50);
-  } else {
-    clearInterval(timer);
-    const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
-    result.textContent = `スコア：${score} / ${selectedSet.length}　時間：${timeTaken}秒`;
-    wordSpan.textContent = "おつかれさま！もう一度条件を選んで挑戦できます";
-    inputField.disabled = true;
-    startBtn.disabled = true;
-  }
-}
-
-// ✅ 時間表示更新
-function updateTimer() {
-  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-  result.textContent = `現在のスコア：${score} / ${selectedSet.length}　経過時間：${elapsed}秒`;
-}
-
-// ✅ 配列シャッフル関数
-function shuffleArray(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
+  <!-- JavaScript 読み込み -->
+  <script src="questions.js"></script>
+  <script src="typing.js"></script>
+</body>
+</html>
