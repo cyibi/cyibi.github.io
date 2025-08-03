@@ -12,7 +12,7 @@ let currentSet = [];
 let currentIndex = 0;
 let score = 0;
 
-// 出題セット（5問）を準備
+// 出題セット（5問）準備
 confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
   const genre = genreSelect.value.toLowerCase();
@@ -25,7 +25,8 @@ confirmBtn.addEventListener("click", () => {
     currentIndex = 0;
     score = 0;
 
-    wordSpan.textContent = `第1問（1/5問）：${currentSet[0]}`;
+    const total = currentSet.length;
+    wordSpan.textContent = `第1問（1/${total}問）｜あと${total - 1}問：${currentSet[0]}`;
     inputBox.disabled = false;
     startBtn.disabled = false;
     inputBox.value = "";
@@ -40,7 +41,7 @@ confirmBtn.addEventListener("click", () => {
   }
 });
 
-// タイピング開始と判定処理
+// タイピング判定と進行
 startBtn.addEventListener("click", () => {
   const userInput = inputBox.value.trim();
   const correctAnswer = currentSet[currentIndex];
@@ -62,19 +63,21 @@ startBtn.addEventListener("click", () => {
   currentIndex++;
 
   if (currentIndex < currentSet.length) {
-    wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/5問）：${currentSet[currentIndex]}`;
+    const total = currentSet.length;
+    const remaining = total - (currentIndex + 1);
+    wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）｜あと${remaining >= 0 ? remaining : 0}問：${currentSet[currentIndex]}`;
     inputBox.value = "";
     feedback.textContent = "";
-    startBtn.disabled = false;
   } else {
-    wordSpan.textContent = `🎉 全5問終了！ ${score}問正解でした！`;
+    wordSpan.textContent = `🎉 全${currentSet.length}問終了！ ${score}問正解でした！`;
     inputBox.disabled = true;
     startBtn.disabled = true;
     feedback.textContent = "";
+    result.style.color = "blue";
   }
 });
 
-// Enterキーでも開始できるように（任意追加）
+// Enterキー対応（任意）
 inputBox.addEventListener("keydown", (e) => {
   if (!startBtn.disabled && e.key === "Enter") {
     startBtn.click();
