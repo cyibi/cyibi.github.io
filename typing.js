@@ -1,4 +1,4 @@
-// 必要な要素の取得
+// 要素取得
 const confirmBtn = document.getElementById("confirm");
 const ageSelect = document.getElementById("age");
 const genreSelect = document.getElementById("genre");
@@ -15,26 +15,24 @@ let score = 0;
 // 出題セット（5問）を準備
 confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
-  const genre = genreSelect.value.toLowerCase(); // 小文字に揃える
+  const genre = genreSelect.value.toLowerCase();
 
   const questionList = questions[age]?.[genre];
 
   if (questionList && questionList.length >= 5) {
-    // ランダムに並べ替えて5問抽出
     const shuffled = questionList.sort(() => Math.random() - 0.5);
     currentSet = shuffled.slice(0, 5);
     currentIndex = 0;
     score = 0;
 
-    // 初期表示設定
-    wordSpan.textContent = `第1問：${currentSet[currentIndex]}`;
+    wordSpan.textContent = `第1問（1/5問）：${currentSet[0]}`;
     inputBox.disabled = false;
     startBtn.disabled = false;
     inputBox.value = "";
     result.textContent = "";
     feedback.textContent = "";
   } else {
-    wordSpan.textContent = "⚠️ 問題が足りません。別のジャンルを選んでください。";
+    wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です";
     inputBox.disabled = true;
     startBtn.disabled = true;
     result.textContent = "";
@@ -42,13 +40,13 @@ confirmBtn.addEventListener("click", () => {
   }
 });
 
-// 各問の判定と進行
+// タイピング開始と判定処理
 startBtn.addEventListener("click", () => {
   const userInput = inputBox.value.trim();
   const correctAnswer = currentSet[currentIndex];
 
   if (userInput === "") {
-    feedback.textContent = "⛳ 何か入力してみましょう！";
+    feedback.textContent = "⛳ 入力してみましょう！";
     return;
   }
 
@@ -57,22 +55,28 @@ startBtn.addEventListener("click", () => {
     result.style.color = "green";
     score++;
   } else {
-    result.textContent = `❌ 残念！正しくは「${correctAnswer}」です`;
+    result.textContent = `❌ 残念！正しくは「${correctAnswer}」でした`;
     result.style.color = "red";
   }
 
   currentIndex++;
 
   if (currentIndex < currentSet.length) {
-    wordSpan.textContent = `第${currentIndex + 1}問：${currentSet[currentIndex]}`;
+    wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/5問）：${currentSet[currentIndex]}`;
     inputBox.value = "";
     feedback.textContent = "";
+    startBtn.disabled = false;
   } else {
-    // 5問終了
-    wordSpan.textContent = `🎉 完了！5問中 ${score} 問正解でした！`;
+    wordSpan.textContent = `🎉 全5問終了！ ${score}問正解でした！`;
     inputBox.disabled = true;
     startBtn.disabled = true;
     feedback.textContent = "";
-    result.style.color = "blue";
+  }
+});
+
+// Enterキーでも開始できるように（任意追加）
+inputBox.addEventListener("keydown", (e) => {
+  if (!startBtn.disabled && e.key === "Enter") {
+    startBtn.click();
   }
 });
