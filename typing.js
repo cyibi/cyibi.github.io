@@ -25,12 +25,13 @@ confirmBtn.addEventListener("click", () => {
     currentIndex = 0;
     score = 0;
 
-    showQuestion();
     inputBox.disabled = false;
     startBtn.disabled = false;
     inputBox.value = "";
     result.textContent = "";
     feedback.textContent = "";
+
+    showQuestion(); // 初回表示も共通関数へ
   } else {
     wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です";
     inputBox.disabled = true;
@@ -40,11 +41,11 @@ confirmBtn.addEventListener("click", () => {
   }
 });
 
-// 問題表示を更新する関数
+// 現在の問題を表示（進捗含む）
 function showQuestion() {
   const total = currentSet.length;
-  const questionText = currentSet[currentIndex];
   const remaining = total - currentIndex - 1;
+  const questionText = currentSet[currentIndex];
 
   wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）｜あと${remaining}問：${questionText}`;
 }
@@ -71,9 +72,9 @@ startBtn.addEventListener("click", () => {
   currentIndex++;
 
   if (currentIndex < currentSet.length) {
-    showQuestion();
     inputBox.value = "";
     feedback.textContent = "";
+    showQuestion();
   } else {
     wordSpan.textContent = `🎉 全${currentSet.length}問終了！ ${score}問正解でした！`;
     inputBox.disabled = true;
