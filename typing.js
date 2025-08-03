@@ -1,3 +1,4 @@
+// 必要な要素の取得
 const confirmBtn = document.getElementById("confirm");
 const ageSelect = document.getElementById("age");
 const genreSelect = document.getElementById("genre");
@@ -11,19 +12,21 @@ let currentSet = [];
 let currentIndex = 0;
 let score = 0;
 
-// 出題セットの準備（5問をランダム抽出）
+// 出題セット（5問）を準備
 confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
-  const genre = genreSelect.value.toLowerCase();
+  const genre = genreSelect.value.toLowerCase(); // 小文字に揃える
 
-  const fullList = questions[age]?.[genre];
+  const questionList = questions[age]?.[genre];
 
-  if (fullList && fullList.length >= 5) {
-    const shuffled = fullList.sort(() => Math.random() - 0.5);
+  if (questionList && questionList.length >= 5) {
+    // ランダムに並べ替えて5問抽出
+    const shuffled = questionList.sort(() => Math.random() - 0.5);
     currentSet = shuffled.slice(0, 5);
     currentIndex = 0;
     score = 0;
 
+    // 初期表示設定
     wordSpan.textContent = `第1問：${currentSet[currentIndex]}`;
     inputBox.disabled = false;
     startBtn.disabled = false;
@@ -31,9 +34,11 @@ confirmBtn.addEventListener("click", () => {
     result.textContent = "";
     feedback.textContent = "";
   } else {
-    wordSpan.textContent = "問題数が足りません";
+    wordSpan.textContent = "⚠️ 問題が足りません。別のジャンルを選んでください。";
     inputBox.disabled = true;
     startBtn.disabled = true;
+    result.textContent = "";
+    feedback.textContent = "";
   }
 });
 
@@ -43,7 +48,7 @@ startBtn.addEventListener("click", () => {
   const correctAnswer = currentSet[currentIndex];
 
   if (userInput === "") {
-    feedback.textContent = "入力欄が空です。まずは答えてみましょう！";
+    feedback.textContent = "⛳ 何か入力してみましょう！";
     return;
   }
 
@@ -52,7 +57,7 @@ startBtn.addEventListener("click", () => {
     result.style.color = "green";
     score++;
   } else {
-    result.textContent = `❌ 間違い。「${correctAnswer}」でした`;
+    result.textContent = `❌ 残念！正しくは「${correctAnswer}」です`;
     result.style.color = "red";
   }
 
@@ -63,9 +68,11 @@ startBtn.addEventListener("click", () => {
     inputBox.value = "";
     feedback.textContent = "";
   } else {
-    wordSpan.textContent = `🎉セット終了！5問中${score}問正解でした`;
+    // 5問終了
+    wordSpan.textContent = `🎉 完了！5問中 ${score} 問正解でした！`;
     inputBox.disabled = true;
     startBtn.disabled = true;
     feedback.textContent = "";
+    result.style.color = "blue";
   }
 });
