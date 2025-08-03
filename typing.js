@@ -12,7 +12,7 @@ let currentSet = [];
 let currentIndex = 0;
 let score = 0;
 
-// 出題セット（5問）準備
+// 出題セット（5問）を準備
 confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
   const genre = genreSelect.value.toLowerCase();
@@ -25,8 +25,7 @@ confirmBtn.addEventListener("click", () => {
     currentIndex = 0;
     score = 0;
 
-    const total = currentSet.length;
-    wordSpan.textContent = `第1問（1/${total}問）｜あと${total - 1}問：${currentSet[0]}`;
+    showQuestion();
     inputBox.disabled = false;
     startBtn.disabled = false;
     inputBox.value = "";
@@ -40,6 +39,15 @@ confirmBtn.addEventListener("click", () => {
     feedback.textContent = "";
   }
 });
+
+// 問題表示を更新する関数
+function showQuestion() {
+  const total = currentSet.length;
+  const questionText = currentSet[currentIndex];
+  const remaining = total - currentIndex - 1;
+
+  wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）｜あと${remaining}問：${questionText}`;
+}
 
 // タイピング判定と進行
 startBtn.addEventListener("click", () => {
@@ -63,9 +71,7 @@ startBtn.addEventListener("click", () => {
   currentIndex++;
 
   if (currentIndex < currentSet.length) {
-    const total = currentSet.length;
-    const remaining = total - (currentIndex + 1);
-    wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）｜あと${remaining >= 0 ? remaining : 0}問：${currentSet[currentIndex]}`;
+    showQuestion();
     inputBox.value = "";
     feedback.textContent = "";
   } else {
@@ -77,7 +83,7 @@ startBtn.addEventListener("click", () => {
   }
 });
 
-// Enterキー対応（任意）
+// Enterキーで回答できる補助機能
 inputBox.addEventListener("keydown", (e) => {
   if (!startBtn.disabled && e.key === "Enter") {
     startBtn.click();
