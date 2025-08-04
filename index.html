@@ -13,6 +13,7 @@
       max-width: 800px;
       margin: auto;
       background-color: #f9f9f9;
+      color: #333;
     }
     nav {
       margin-bottom: 20px;
@@ -22,11 +23,7 @@
       text-decoration: none;
       color: #0077cc;
     }
-    h1 {
-      color: #333;
-    }
-    h2 {
-      margin-top: 40px;
+    h1, h2 {
       color: #444;
     }
     ul {
@@ -66,12 +63,17 @@
       margin-bottom: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.05);
     }
-    #quiz-area strong {
-      color: #333;
+    #badge-area {
+      margin-top: 15px;
     }
-    #quiz-area em {
-      color: #555;
-      font-style: italic;
+    #typing-box {
+      width: 100%;
+      font-size: 16px;
+      padding: 10px;
+    }
+    .premium-link {
+      background-color: #ff5722;
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -99,7 +101,22 @@
   </ul>
   <a href="game.html" class="start-button">▶ タイピングゲームスタート</a>
 
-  <!-- 時計クイズゲーム紹介 -->
+  <!-- バッジ機能付きタイプ判定 -->
+  <h2>タイピング結果・称号バッジ</h2>
+  <p>入力した文章に応じてスコアを算出し、称号バッジを表示します！</p>
+  <textarea id="typing-box" rows="4" placeholder="例文を入力：タイピング教材は楽しい"></textarea><br>
+  <button id="check-btn" class="start-button">判定する</button>
+  <div id="result-area">
+    スコア: <span id="score">0</span>
+    <div id="badge-area"></div>
+  </div>
+
+  <!-- 有料版案内 -->
+  <div style="text-align: center;">
+    <a href="premium.html" class="start-button premium-link">▶ 有料版はこちら｜称号保存・拡張教材つき</a>
+  </div>
+
+  <!-- 時計クイズ紹介 -->
   <h2>新しく追加！時計クイズゲーム</h2>
   <p>アナログ時計を見て、正しい時刻を選ぶクイズ形式のゲームです。時間の読み方を楽しく学べます。</p>
   <ul>
@@ -107,26 +124,44 @@
     <li>視覚的に学べるので、低学年にもぴったり</li>
     <li>正解・不正解のフィードバックで理解が深まる</li>
   </ul>
-  <a href="clock_game.html" class="start-button clock-button">▶時計クイズスタート</a>
+  <a href="clock_game.html" class="start-button clock-button">▶ 時計クイズスタート</a>
 
-
-  <!-- JavaScript読み込み -->
-  <script src="clock_game.js"></script>
-  <script>
-    function showQuiz(level) {
-      const container = document.getElementById("quiz-area");
-      container.innerHTML = "";
-
-      const list = document.createElement("ul");
-
-      clockQuizData[level].forEach((item, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>Q${index + 1}:</strong> ${item.q}<br><em>答え：</em> ${item.a}`;
-        list.appendChild(li);
-      });
-
-      container.appendChild(list);
+  <!-- JS読み込み（モジュール形式） -->
+  <script type="module">
+    // badge.js
+    function getRank(score) {
+      if (score >= 95) return "達人";
+      if (score >= 85) return "熟練者";
+      if (score >= 70) return "努力家";
+      return "挑戦者";
     }
+
+    function renderBadge(score) {
+      const rank = getRank(score);
+      const svg = `<svg width="240" height="60">
+        <rect width="240" height="60" rx="10" fill="#ffe066" stroke="#333" stroke-width="2"/>
+        <text x="20" y="38" font-size="20" fill="#333">称号: ${rank}</text>
+      </svg>`;
+      document.getElementById("badge-area").innerHTML = svg;
+    }
+
+    // main.js（仮：スコア計算）
+    function calculateScore(inputText) {
+      const target = "タイピング教材は楽しい";
+      let correct = 0;
+      for (let i = 0; i < Math.min(inputText.length, target.length); i++) {
+        if (inputText[i] === target[i]) correct++;
+      }
+      return Math.round((correct / target.length) * 100);
+    }
+
+    // 判定ボタン処理
+    document.getElementById("check-btn").addEventListener("click", () => {
+      const input = document.getElementById("typing-box").value;
+      const score = calculateScore(input);
+      document.getElementById("score").textContent = score;
+      renderBadge(score);
+    });
   </script>
 
 </body>
