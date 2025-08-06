@@ -6,7 +6,7 @@ const wordSpan = document.getElementById("word");
 const inputBox = document.getElementById("input");
 const startBtn = document.getElementById("start");
 const result = document.getElementById("result");
-const feedback = document.getElementById("feedback");
+const feedback = document.getElementById("feedback"); // 存在しない場合は null
 
 let currentSet = [];
 let currentIndex = 0;
@@ -29,7 +29,7 @@ confirmBtn.addEventListener("click", () => {
     startBtn.disabled = false;
     inputBox.value = "";
     result.textContent = "";
-    feedback.textContent = "";
+    if (feedback) feedback.textContent = "";
 
     showQuestion(); // 初回表示も共通関数へ
   } else {
@@ -37,7 +37,7 @@ confirmBtn.addEventListener("click", () => {
     inputBox.disabled = true;
     startBtn.disabled = true;
     result.textContent = "";
-    feedback.textContent = "";
+    if (feedback) feedback.textContent = "";
   }
 });
 
@@ -56,7 +56,7 @@ startBtn.addEventListener("click", () => {
   const correctAnswer = currentSet[currentIndex];
 
   if (userInput === "") {
-    feedback.textContent = "⛳ 入力してみましょう！";
+    if (feedback) feedback.textContent = "⛳ 入力してみましょう！";
     return;
   }
 
@@ -73,13 +73,13 @@ startBtn.addEventListener("click", () => {
 
   if (currentIndex < currentSet.length) {
     inputBox.value = "";
-    feedback.textContent = "";
+    if (feedback) feedback.textContent = "";
     showQuestion();
   } else {
     wordSpan.textContent = `🎉 全${currentSet.length}問終了！ ${score}問正解でした！`;
     inputBox.disabled = true;
     startBtn.disabled = true;
-    feedback.textContent = "";
+    if (feedback) feedback.textContent = "";
     result.style.color = "blue";
   }
 });
