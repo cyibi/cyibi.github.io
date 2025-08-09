@@ -5,15 +5,83 @@
   <title>章別タイピングゲーム｜無料で楽しくタイピング練習！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <style>
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    nav {
+      margin-bottom: 20px;
+    }
+    nav a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #0077cc;
+    }
+    h1 {
+      color: #444;
+    }
+    select, input, button {
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 8px;
+    }
+    #word {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    #feedback {
+      color: #cc0000;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    #timer {
+      font-size: 1.2em;
+      color: #0077cc;
+      margin-top: 10px;
+    }
+    #adModal {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 10%;
+      width: 80%;
+      background: #fff;
+      border: 2px solid #333;
+      padding: 20px;
+      z-index: 1000;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    #adConfirm {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+
   <!-- ナビゲーション -->
   <nav>
     <a href="index.html">ホーム</a> |
     <a href="howto.html">遊び方</a> |
     <a href="tips.html">上達のコツ</a> |
     <a href="story.html">開発の裏話</a> |
-    <a href="privacy.html">プライバシーポリシー</a> |
+    <a href="privacy.html">プライバシーポリシー</a>
   </nav>
 
   <h1>タイピングゲーム</h1>
@@ -29,13 +97,15 @@
 
   <!-- ジャンル指定 -->
   <label for="genre">ジャンル：</label>
-<select id="genre">
-  <option value="game">ゲーム</option>
-  <option value="anime">アニメ</option>
-  <option value="animal">動物</option>
-  <option value="character">キャラクター</option>
-  <option value="youtube">YouTube</option>
-</select>
+  <select id="genre">
+    <option value="game">ゲーム</option>
+    <option value="anime">アニメ</option>
+    <option value="animal">動物</option>
+    <option value="character">キャラクター</option>
+    <option value="youtube">YouTube</option>
+    <option value="intermediate_game">中級ゲーム</option>
+    <option value="advanced_game">上級ゲーム</option>
+  </select>
 
   <!-- 確定ボタン -->
   <button id="confirm">この条件で出題する</button>
@@ -43,12 +113,13 @@
   <!-- 出題＆タイピング入力 -->
   <p>お題：<span id="word">ジャンルを選んで確定してください</span></p>
   <input type="text" id="input" placeholder="ここに入力" disabled />
-
-  <!-- スタートボタン -->
   <button id="start" disabled>タイピング開始！</button>
-  <p id="result"></p>
 
-  <!-- 広告表示エリア（既存） -->
+  <p id="result"></p>
+  <p id="feedback"></p>
+  <p id="timer"></p>
+
+  <!-- 広告表示エリア -->
   <div style="margin-top: 30px;">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
       crossorigin="anonymous"></script>
@@ -63,6 +134,12 @@
     </script>
   </div>
 
+  <!-- 広告視聴モーダル -->
+  <div id="adModal">
+    <h3>📺 中級に進むには広告動画を視聴してください</h3>
+    <p>※ 実際の広告はここに表示されます（例：YouTube埋め込みなど）</p>
+    <button id="adConfirm">視聴完了</button>
+  </div>
 
   <!-- 利用案内 -->
   <p style="margin-top: 40px; font-size: 0.9em; color: #666;">
@@ -74,4 +151,3 @@
   <script src="typing.js"></script>
 </body>
 </html>
-
