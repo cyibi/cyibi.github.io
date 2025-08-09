@@ -45,10 +45,9 @@ confirmBtn.addEventListener("click", () => {
 function showQuestion() {
   const total = currentSet.length;
   const remaining = total - currentIndex ;
-  const questionText = currentSet[currentIndex];
+  const questionText = currentSet[currentIndex]-1;
 
-  wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）｜あと${remaining}問：${questionText}`;
-}
+  wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）;
 
 // タイピング判定と進行
 startBtn.addEventListener("click", () => {
@@ -90,4 +89,5 @@ inputBox.addEventListener("keydown", (e) => {
     startBtn.click();
   }
 });
+
 
