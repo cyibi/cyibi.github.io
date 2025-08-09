@@ -44,7 +44,7 @@ confirmBtn.addEventListener("click", () => {
 // 現在の問題を表示（進捗含む）
 function showQuestion() {
   const total = currentSet.length;
-  const remaining = total - currentIndex - 1;
+  const remaining = total - currentIndex ;
   const questionText = currentSet[currentIndex];
 
   wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）｜あと${remaining}問：${questionText}`;
@@ -90,3 +90,4 @@ inputBox.addEventListener("keydown", (e) => {
     startBtn.click();
   }
 });
+
