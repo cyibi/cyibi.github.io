@@ -10,6 +10,8 @@ const feedback = document.getElementById("feedback");
 const timerDisplay = document.getElementById("timer");
 const adModal = document.getElementById("adModal");
 const adConfirmBtn = document.getElementById("adConfirm");
+const videoContainer = document.getElementById("videoContainer");
+const promoVideo = document.getElementById("promoVideo");
 
 let currentSet = [];
 let currentIndex = 0;
@@ -31,6 +33,8 @@ confirmBtn.addEventListener("click", () => {
     startBtn.disabled = true;
     result.textContent = "";
     if (feedback) feedback.textContent = "";
+    videoContainer.style.display = "none";
+    promoVideo.src = "";
     return;
   }
 
@@ -67,6 +71,15 @@ function startGame(questionList, genreInfo) {
   inputBox.value = "";
   result.textContent = "";
   if (feedback) feedback.textContent = "";
+
+  // 🎥 動画表示制御
+  if (genreInfo.showVideo && genreInfo.videoUrl) {
+    videoContainer.style.display = "block";
+    promoVideo.src = genreInfo.videoUrl;
+  } else {
+    videoContainer.style.display = "none";
+    promoVideo.src = "";
+  }
 
   showQuestion();
 }
