@@ -71,6 +71,15 @@
       margin-top: 10px;
       cursor: pointer;
     }
+    #videoContainer {
+      margin-top: 20px;
+      display: none;
+    }
+    #promoVideo {
+      width: 100%;
+      height: 200px;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -119,6 +128,11 @@
   <p id="feedback"></p>
   <p id="timer"></p>
 
+  <!-- 🎥 動画表示エリア（ゲーム・アニメ以外で表示） -->
+  <div id="videoContainer">
+    <iframe id="promoVideo" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
   <!-- 広告表示エリア -->
   <div style="margin-top: 30px;">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
@@ -148,6 +162,7 @@
 
   <!-- JavaScript 読み込み -->
   <script src="questions.js"></script>
+  <script src="genreDefinitions.js"></script>
   <script src="typing.js"></script>
 </body>
 </html>
