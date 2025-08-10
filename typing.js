@@ -8,8 +8,6 @@ const startBtn = document.getElementById("start");
 const result = document.getElementById("result");
 const feedback = document.getElementById("feedback");
 const timerDisplay = document.getElementById("timer");
-const adModal = document.getElementById("adModal");
-const adConfirmBtn = document.getElementById("adConfirm");
 const videoContainer = document.getElementById("videoContainer");
 const promoVideo = document.getElementById("promoVideo");
 
@@ -38,27 +36,10 @@ confirmBtn.addEventListener("click", () => {
     return;
   }
 
-  if (genreInfo.showAd && genreInfo.timeLimit > 0) {
-    adModal.style.display = "block";
-    adModal.dataset.genre = selectedGenreValue;
-    adModal.dataset.age = age;
-    return;
-  }
-
   startGame(questionList, genreInfo);
 });
 
-// 広告視聴完了後にゲーム開始
-adConfirmBtn.addEventListener("click", () => {
-  adModal.style.display = "none";
-  const age = adModal.dataset.age;
-  const genreValue = adModal.dataset.genre;
-  const genreInfo = genreDefinitions[genreValue];
-  const genreKey = genreInfo.key;
-  const questionList = questions[age]?.[genreKey];
-  startGame(questionList, genreInfo);
-});
-
+// ゲーム開始処理
 function startGame(questionList, genreInfo) {
   const shuffled = questionList.sort(() => Math.random() - 0.5);
   currentSet = shuffled.slice(0, 5);
@@ -84,6 +65,7 @@ function startGame(questionList, genreInfo) {
   showQuestion();
 }
 
+// 問題表示
 function showQuestion() {
   const total = currentSet.length;
   const questionText = currentSet[currentIndex];
@@ -100,6 +82,7 @@ function showQuestion() {
   }
 }
 
+// タイマー処理
 function startTimer(seconds) {
   let remaining = seconds;
   timerDisplay.textContent = `⏱ 残り ${remaining} 秒`;
@@ -127,6 +110,7 @@ function startTimer(seconds) {
   }, 1000);
 }
 
+// 回答判定
 startBtn.addEventListener("click", () => {
   const userInput = inputBox.value.trim();
   const correctAnswer = currentSet[currentIndex];
@@ -155,12 +139,14 @@ startBtn.addEventListener("click", () => {
   }
 });
 
+// Enterキーで回答
 inputBox.addEventListener("keydown", (e) => {
   if (!startBtn.disabled && e.key === "Enter") {
     startBtn.click();
   }
 });
 
+// ゲーム終了処理
 function endGame() {
   wordSpan.textContent = `🎉 全${currentSet.length}問終了！ ${score}問正解でした！`;
   inputBox.disabled = true;
