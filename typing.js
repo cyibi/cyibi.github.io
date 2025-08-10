@@ -6,9 +6,10 @@ const wordSpan = document.getElementById("word");
 const inputBox = document.getElementById("input");
 const startBtn = document.getElementById("start");
 const result = document.getElementById("result");
-const feedback = document.getElementById("feedback"); // 存在しない場合は null
+const feedback = document.getElementById("feedback");
 const timerDisplay = document.getElementById("timer");
-const adArea = document.getElementById("adArea"); // 広告画像表示領域
+const adModal = document.getElementById("adModal");
+const adConfirmBtn = document.getElementById("adConfirm");
 
 let currentSet = [];
 let currentIndex = 0;
@@ -16,31 +17,50 @@ let score = 0;
 let timer;
 let timeLimit = 0;
 
-// 出題セット（5問）を準備
+// 出題セット準備
 confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
-  const genre = genreSelect.value.toLowerCase();
-  const questionList = questions[age]?.[genre];
+  const selectedGenreValue = genreSelect.value;
+  const genreInfo = genreDefinitions[selectedGenreValue];
+  const genreKey = genreInfo.key;
+  const questionList = questions[age]?.[genreKey];
 
-  if (questionList && questionList.length >= 5) {
-    const noAdGenres = ["ゲーム", "アニメ"];
-    const showInlineAd = !noAdGenres.includes(genre);
-
-    startGame(questionList, showInlineAd);
-  } else {
+  if (!questionList || questionList.length < 5) {
     wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です";
     inputBox.disabled = true;
     startBtn.disabled = true;
     result.textContent = "";
     if (feedback) feedback.textContent = "";
+    return;
   }
+
+  if (genreInfo.showAd && genreInfo.timeLimit > 0) {
+    adModal.style.display = "block";
+    adModal.dataset.genre = selectedGenreValue;
+    adModal.dataset.age = age;
+    return;
+  }
+
+  startGame(questionList, genreInfo);
 });
 
-function startGame(questionList, showAd) {
+// 広告視聴完了後にゲーム開始
+adConfirmBtn.addEventListener("click", () => {
+  adModal.style.display = "none";
+  const age = adModal.dataset.age;
+  const genreValue = adModal.dataset.genre;
+  const genreInfo = genreDefinitions[genreValue];
+  const genreKey = genreInfo.key;
+  const questionList = questions[age]?.[genreKey];
+  startGame(questionList, genreInfo);
+});
+
+function startGame(questionList, genreInfo) {
   const shuffled = questionList.sort(() => Math.random() - 0.5);
   currentSet = shuffled.slice(0, 5);
   currentIndex = 0;
   score = 0;
+  timeLimit = genreInfo.timeLimit;
 
   inputBox.disabled = false;
   startBtn.disabled = false;
@@ -48,27 +68,52 @@ function startGame(questionList, showAd) {
   result.textContent = "";
   if (feedback) feedback.textContent = "";
 
-  timeLimit = 0; // タイマーなし（初級固定）
-
-  if (showAd) startInlineAd();
-
   showQuestion();
 }
 
-// 現在の問題を表示
 function showQuestion() {
   const total = currentSet.length;
   const questionText = currentSet[currentIndex];
 
   wordSpan.textContent = `第${currentIndex + 1}問（${currentIndex + 1}/${total}問）: ${questionText}`;
   inputBox.value = "";
-  if (feedback) feedback.textContent = "";
   result.textContent = "";
+  if (feedback) feedback.textContent = "";
 
-  timerDisplay.textContent = ""; // タイマー非表示
+  if (timeLimit > 0) {
+    startTimer(timeLimit);
+  } else {
+    timerDisplay.textContent = "";
+  }
 }
 
-// タイピング判定と進行
+function startTimer(seconds) {
+  let remaining = seconds;
+  timerDisplay.textContent = `⏱ 残り ${remaining} 秒`;
+  clearInterval(timer);
+  timer = setInterval(() => {
+    remaining--;
+    timerDisplay.textContent = `⏱ 残り ${remaining} 秒`;
+    if (remaining <= 0) {
+      clearInterval(timer);
+      inputBox.disabled = true;
+      startBtn.disabled = true;
+      result.textContent = `⌛ 時間切れ！正しくは「${currentSet[currentIndex]}」でした`;
+      result.style.color = "red";
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < currentSet.length) {
+          inputBox.disabled = false;
+          startBtn.disabled = false;
+          showQuestion();
+        } else {
+          endGame();
+        }
+      }, 2000);
+    }
+  }, 1000);
+}
+
 startBtn.addEventListener("click", () => {
   const userInput = inputBox.value.trim();
   const correctAnswer = currentSet[currentIndex];
@@ -82,6 +127,7 @@ startBtn.addEventListener("click", () => {
     result.textContent = `✅ 正解！「${correctAnswer}」`;
     result.style.color = "green";
     score++;
+    clearInterval(timer);
     currentIndex++;
     if (currentIndex < currentSet.length) {
       showQuestion();
@@ -96,14 +142,12 @@ startBtn.addEventListener("click", () => {
   }
 });
 
-// Enterキーで回答できる補助機能
 inputBox.addEventListener("keydown", (e) => {
   if (!startBtn.disabled && e.key === "Enter") {
     startBtn.click();
   }
 });
 
-// ゲーム終了処理
 function endGame() {
   wordSpan.textContent = `🎉 全${currentSet.length}問終了！ ${score}問正解でした！`;
   inputBox.disabled = true;
@@ -111,18 +155,4 @@ function endGame() {
   if (feedback) feedback.textContent = "";
   result.style.color = "blue";
   timerDisplay.textContent = "";
-}
-
-// 広告画像をタイピング中に表示
-function startInlineAd() {
-  const adImages = ["ad1.jpg", "ad2.jpg", "ad3.jpg"]; // 画像ファイル名を適宜変更
-  let index = 0;
-
-  if (!adArea) return;
-
-  adArea.src = adImages[index];
-  setInterval(() => {
-    index = (index + 1) % adImages.length;
-    adArea.src = adImages[index];
-  }, 5000); // 5秒ごとに切り替え
 }
