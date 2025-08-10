@@ -7,32 +7,26 @@ const inputBox = document.getElementById("input");
 const startBtn = document.getElementById("start");
 const result = document.getElementById("result");
 const feedback = document.getElementById("feedback"); // 存在しない場合は null
-const timerDisplay = document.getElementById("timer"); // タイマー表示用
-const adModal = document.getElementById("adModal"); // 広告モーダル
-const adConfirmBtn = document.getElementById("adConfirm"); // 広告視聴完了ボタン
+const timerDisplay = document.getElementById("timer");
+const adArea = document.getElementById("adArea"); // 広告画像表示領域
 
 let currentSet = [];
 let currentIndex = 0;
 let score = 0;
 let timer;
 let timeLimit = 0;
-let currentLevel = "初級";
 
 // 出題セット（5問）を準備
 confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
   const genre = genreSelect.value.toLowerCase();
-  currentLevel = genre.includes("中級") ? "中級" : genre.includes("上級") ? "上級" : "初級";
-
   const questionList = questions[age]?.[genre];
 
   if (questionList && questionList.length >= 5) {
-    if (currentLevel === "中級") {
-      adModal.style.display = "block";
-      return;
-    }
+    const noAdGenres = ["ゲーム", "アニメ"];
+    const showInlineAd = !noAdGenres.includes(genre);
 
-    startGame(questionList);
+    startGame(questionList, showInlineAd);
   } else {
     wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です";
     inputBox.disabled = true;
@@ -42,16 +36,7 @@ confirmBtn.addEventListener("click", () => {
   }
 });
 
-// 広告視聴完了後にゲーム開始
-adConfirmBtn.addEventListener("click", () => {
-  adModal.style.display = "none";
-  const age = ageSelect.value;
-  const genre = genreSelect.value.toLowerCase();
-  const questionList = questions[age]?.[genre];
-  startGame(questionList);
-});
-
-function startGame(questionList) {
+function startGame(questionList, showAd) {
   const shuffled = questionList.sort(() => Math.random() - 0.5);
   currentSet = shuffled.slice(0, 5);
   currentIndex = 0;
@@ -63,12 +48,14 @@ function startGame(questionList) {
   result.textContent = "";
   if (feedback) feedback.textContent = "";
 
-  timeLimit = currentLevel === "初級" ? 0 : currentLevel === "中級" ? 30 : 20;
+  timeLimit = 0; // タイマーなし（初級固定）
+
+  if (showAd) startInlineAd();
 
   showQuestion();
 }
 
-// 現在の問題を表示（進捗含む）
+// 現在の問題を表示
 function showQuestion() {
   const total = currentSet.length;
   const questionText = currentSet[currentIndex];
@@ -78,39 +65,7 @@ function showQuestion() {
   if (feedback) feedback.textContent = "";
   result.textContent = "";
 
-  if (timeLimit > 0) {
-    startTimer(timeLimit);
-  } else {
-    timerDisplay.textContent = "";
-  }
-}
-
-// タイマー開始
-function startTimer(seconds) {
-  let remaining = seconds;
-  timerDisplay.textContent = `⏱ 残り ${remaining} 秒`;
-  clearInterval(timer);
-  timer = setInterval(() => {
-    remaining--;
-    timerDisplay.textContent = `⏱ 残り ${remaining} 秒`;
-    if (remaining <= 0) {
-      clearInterval(timer);
-      inputBox.disabled = true;
-      startBtn.disabled = true;
-      result.textContent = `⌛ 時間切れ！正しくは「${currentSet[currentIndex]}」でした`;
-      result.style.color = "red";
-      setTimeout(() => {
-        currentIndex++;
-        if (currentIndex < currentSet.length) {
-          inputBox.disabled = false;
-          startBtn.disabled = false;
-          showQuestion();
-        } else {
-          endGame();
-        }
-      }, 2000);
-    }
-  }, 1000);
+  timerDisplay.textContent = ""; // タイマー非表示
 }
 
 // タイピング判定と進行
@@ -127,7 +82,6 @@ startBtn.addEventListener("click", () => {
     result.textContent = `✅ 正解！「${correctAnswer}」`;
     result.style.color = "green";
     score++;
-    clearInterval(timer);
     currentIndex++;
     if (currentIndex < currentSet.length) {
       showQuestion();
@@ -157,4 +111,18 @@ function endGame() {
   if (feedback) feedback.textContent = "";
   result.style.color = "blue";
   timerDisplay.textContent = "";
+}
+
+// 広告画像をタイピング中に表示
+function startInlineAd() {
+  const adImages = ["ad1.jpg", "ad2.jpg", "ad3.jpg"]; // 画像ファイル名を適宜変更
+  let index = 0;
+
+  if (!adArea) return;
+
+  adArea.src = adImages[index];
+  setInterval(() => {
+    index = (index + 1) % adImages.length;
+    adArea.src = adImages[index];
+  }, 5000); // 5秒ごとに切り替え
 }
