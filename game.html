@@ -50,27 +50,6 @@
       color: #0077cc;
       margin-top: 10px;
     }
-    #adModal {
-      display: none;
-      position: fixed;
-      top: 20%;
-      left: 10%;
-      width: 80%;
-      background: #fff;
-      border: 2px solid #333;
-      padding: 20px;
-      z-index: 1000;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    #adConfirm {
-      padding: 10px 20px;
-      background: #4CAF50;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
     #videoContainer {
       margin-top: 20px;
       display: none;
@@ -104,7 +83,7 @@
     <option value="12">12歳</option>
   </select>
 
-  <!-- ジャンル指定 -->
+  <!-- ジャンル指定（中級・上級を削除済み） -->
   <label for="genre">ジャンル：</label>
   <select id="genre">
     <option value="game">ゲーム</option>
@@ -112,8 +91,6 @@
     <option value="animal">動物</option>
     <option value="character">キャラクター</option>
     <option value="youtube">YouTube</option>
-    <option value="intermediate_game">中級ゲーム</option>
-    <option value="advanced_game">上級ゲーム</option>
   </select>
 
   <!-- 確定ボタン -->
@@ -133,7 +110,7 @@
     <iframe id="promoVideo" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
-  <!-- 広告表示エリア -->
+  <!-- 広告表示エリア（AdSense） -->
   <div style="margin-top: 30px;">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3312473553198083"
       crossorigin="anonymous"></script>
@@ -146,13 +123,6 @@
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
-  </div>
-
-  <!-- 広告視聴モーダル -->
-  <div id="adModal">
-    <h3>📺 中級に進むには広告動画を視聴してください</h3>
-    <p>※ 実際の広告はここに表示されます（例：YouTube埋め込みなど）</p>
-    <button id="adConfirm">視聴完了</button>
   </div>
 
   <!-- 利用案内 -->
