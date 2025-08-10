@@ -67,6 +67,9 @@ function startGame(questionList, genreInfo) {
 
 // 問題表示
 function showQuestion() {
+  inputBox.disabled = false;
+  inputBox.focus();
+
   const total = currentSet.length;
   const questionText = currentSet[currentIndex];
 
