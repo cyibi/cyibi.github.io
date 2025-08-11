@@ -23,7 +23,7 @@ confirmBtn.addEventListener("click", () => {
   const selectedGenreValue = genreSelect.value;
 
   // 安全にジャンル定義を取得
-  const genreInfo = genreDefinition?.[selectedGenreValue];
+  const genreInfo = genreDefinitions?.[selectedGenreValue];
   if (!genreInfo) {
     wordSpan.textContent = "⚠️ ジャンル定義が見つかりません";
     inputBox.disabled = true;
@@ -176,4 +176,5 @@ function endGame() {
   result.style.color = "blue";
   timerDisplay.textContent = "";
 }
+
 
