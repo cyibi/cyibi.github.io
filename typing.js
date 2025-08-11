@@ -22,11 +22,18 @@ confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
   const selectedGenreValue = genreSelect.value;
   const genreInfo = genreDefinitions[selectedGenreValue];
-  const genreKey = genreInfo.key;
+  const genreKey = genreInfo?.key;
   const questionList = questions[age]?.[genreKey];
 
+  // 🔍 デバッグログ
+  console.log("選択された年齢:", age);
+  console.log("選択されたジャンル:", selectedGenreValue);
+  console.log("ジャンル定義:", genreInfo);
+  console.log("ジャンルキー:", genreKey);
+  console.log("取得された問題リスト:", questionList);
+
   if (!questionList || questionList.length < 5) {
-    wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です";
+    wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です。別のジャンルを選んでください。";
     inputBox.disabled = true;
     startBtn.disabled = true;
     result.textContent = "";
@@ -93,6 +100,11 @@ function startTimer(seconds) {
   timer = setInterval(() => {
     remaining--;
     timerDisplay.textContent = `⏱ 残り ${remaining} 秒`;
+    if (remaining <= 3) {
+      timerDisplay.style.color = "red";
+    } else {
+      timerDisplay.style.color = "#0077cc";
+    }
     if (remaining <= 0) {
       clearInterval(timer);
       inputBox.disabled = true;
