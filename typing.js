@@ -177,4 +177,6 @@ function endGame() {
   timerDisplay.textContent = "";
 }
 
+console.log("questions:", questions);
+
 
