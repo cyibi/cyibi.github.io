@@ -8,8 +8,7 @@ const startBtn = document.getElementById("start");
 const result = document.getElementById("result");
 const feedback = document.getElementById("feedback");
 const timerDisplay = document.getElementById("timer");
-const videoContainer = document.getElementById("videoContainer");
-const promoVideo = document.getElementById("promoVideo");
+const adContainer = document.getElementById("videoContainer"); // 広告表示エリア
 
 let currentSet = [];
 let currentIndex = 0;
@@ -22,24 +21,17 @@ confirmBtn.addEventListener("click", () => {
   const age = ageSelect.value;
   const selectedGenreValue = genreSelect.value;
 
-  // 安全にジャンル定義を取得
   const genreInfo = genreDefinitions?.[selectedGenreValue];
   if (!genreInfo) {
     wordSpan.textContent = "⚠️ ジャンル定義が見つかりません";
     inputBox.disabled = true;
     startBtn.disabled = true;
+    adContainer.style.display = "none";
     return;
   }
 
   const genreKey = genreInfo.key;
   const questionList = questions?.[age]?.[genreKey];
-
-  // デバッグログ
-  console.log("年齢:", age);
-  console.log("ジャンル:", selectedGenreValue);
-  console.log("ジャンル定義:", genreInfo);
-  console.log("ジャンルキー:", genreKey);
-  console.log("問題リスト:", questionList);
 
   if (!Array.isArray(questionList) || questionList.length < 5) {
     wordSpan.textContent = "⚠️ このジャンルには問題が5問以上必要です。別のジャンルを選んでください。";
@@ -47,8 +39,7 @@ confirmBtn.addEventListener("click", () => {
     startBtn.disabled = true;
     result.textContent = "";
     if (feedback) feedback.textContent = "";
-    videoContainer.style.display = "none";
-    promoVideo.src = "";
+    adContainer.style.display = "none";
     return;
   }
 
@@ -69,13 +60,11 @@ function startGame(questionList, genreInfo) {
   result.textContent = "";
   if (feedback) feedback.textContent = "";
 
-  // 動画表示制御
-  if (genreInfo.showVideo && genreInfo.videoUrl) {
-    videoContainer.style.display = "block";
-    promoVideo.src = genreInfo.videoUrl;
+  // 広告表示制御（動画の代替）
+  if (genreInfo.showAd) {
+    adContainer.style.display = "block";
   } else {
-    videoContainer.style.display = "none";
-    promoVideo.src = "";
+    adContainer.style.display = "none";
   }
 
   showQuestion();
@@ -176,7 +165,3 @@ function endGame() {
   result.style.color = "blue";
   timerDisplay.textContent = "";
 }
-
-console.log("questions:", questions);
-
-
