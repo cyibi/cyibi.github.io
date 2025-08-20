@@ -60,12 +60,12 @@ function startGame(questionList, genreInfo) {
   result.textContent = "";
   if (feedback) feedback.textContent = "";
 
-  // 広告表示制御（動画の代替）
-  if (genreInfo.showAd) {
-    adContainer.style.display = "block";
-  } else {
-    adContainer.style.display = "none";
-  }
+ // 広告表示制御（動画の代替）
+if (genreInfo.showAd) {
+  adContainer.style.display = "block";
+} else {
+  adContainer.style.display = "none"; // ← ここを追加
+}
 
   showQuestion();
 }
@@ -165,3 +165,4 @@ function endGame() {
   result.style.color = "blue";
   timerDisplay.textContent = "";
 }
+
