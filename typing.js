@@ -61,10 +61,10 @@ function startGame(questionList, genreInfo) {
   if (feedback) feedback.textContent = "";
 
  // 広告表示制御（動画の代替）
-if (genreInfo.showAd) {
+if (genreInfo?.showAd && adContainer) {
   adContainer.style.display = "block";
-} else {
-  adContainer.style.display = "none"; // ← ここを追加
+} else if (adContainer) {
+  adContainer.style.display = "none";
 }
 
   showQuestion();
@@ -165,4 +165,5 @@ function endGame() {
   result.style.color = "blue";
   timerDisplay.textContent = "";
 }
+
 
